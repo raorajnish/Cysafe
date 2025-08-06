@@ -2,37 +2,173 @@
 
 {% block title %}CySafe - India's Cybersecurity Platform{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Mobile-specific hero section styles */
+    @media (max-width: 767px) {
+        .hero-section {
+            padding: 2rem 0 !important;
+        }
+        
+        .hero-badge {
+            font-size: 0.8rem !important;
+            padding: 0.5rem 1rem !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        .hero-title {
+            font-size: 2rem !important;
+            line-height: 1.2 !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        .hero-description {
+            font-size: 1rem !important;
+            line-height: 1.5 !important;
+            margin-bottom: 1.5rem !important;
+        }
+        
+        .hero-buttons {
+            gap: 0.75rem !important;
+        }
+        
+        .hero-btn {
+            padding: 0.75rem 1.5rem !important;
+            font-size: 0.9rem !important;
+        }
+        
+        .hero-icon {
+            font-size: 8rem !important;
+            margin-top: 1rem !important;
+        }
+        
+        .hero-row {
+            text-align: center !important;
+        }
+        
+        .hero-content {
+            order: 2 !important;
+        }
+        
+        .hero-visual {
+            order: 1 !important;
+            margin-bottom: 1rem !important;
+        }
+    }
+    
+    /* Tablet adjustments */
+    @media (min-width: 768px) and (max-width: 991px) {
+        .hero-section {
+            padding: 3rem 0 !important;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem !important;
+        }
+        
+        .hero-icon {
+            font-size: 12rem !important;
+        }
+    }
+    
+    /* Mobile-specific features section styles */
+    @media (max-width: 767px) {
+        .features-section {
+            padding: 2rem 0 !important;
+        }
+        
+        .features-header {
+            margin-bottom: 2rem !important;
+        }
+        
+        .features-title {
+            font-size: 1.75rem !important;
+            margin-bottom: 0.75rem !important;
+        }
+        
+        .features-subtitle {
+            font-size: 1rem !important;
+            line-height: 1.4 !important;
+        }
+        
+        .feature-card {
+            margin-bottom: 1rem !important;
+        }
+        
+        .feature-icon {
+            width: 50px !important;
+            height: 50px !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        .feature-icon i {
+            font-size: 1.5rem !important;
+        }
+        
+        .feature-title {
+            font-size: 1.1rem !important;
+            margin-bottom: 0.75rem !important;
+        }
+        
+        .feature-description {
+            font-size: 0.9rem !important;
+            line-height: 1.4 !important;
+        }
+        
+        .feature-card .card-body {
+            padding: 1.5rem !important;
+        }
+    }
+    
+    /* Tablet adjustments for features */
+    @media (min-width: 768px) and (max-width: 991px) {
+        .features-section {
+            padding: 3rem 0 !important;
+        }
+        
+        .features-title {
+            font-size: 2rem !important;
+        }
+        
+        .feature-icon {
+            width: 55px !important;
+            height: 55px !important;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
-<section class="bg-gradient-primary text-white py-5">
+<section class="bg-gradient-primary text-white py-5 hero-section">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
+        <div class="row align-items-center hero-row">
+            <div class="col-lg-6 hero-content">
                 <div class="mb-4">
-                    <span class="badge bg-light text-primary px-3 py-2 mb-3">
+                    <span class="badge bg-light text-primary px-3 py-2 mb-3 hero-badge">
                         <i class="fas fa-shield-alt me-2"></i>India's Cyber Security Platform
                     </span>
                 </div>
-                <h1 class="display-4 fw-bold mb-4">
+                <h1 class="display-4 fw-bold mb-4 hero-title">
                     Stay Safe in the
                     <span class="text-warning">Digital World</span>
                 </h1>
-                <p class="lead mb-4">
+                <p class="lead mb-4 hero-description">
                     Learn about cyber crimes, get expert guidance, and report incidents with India's most comprehensive 
                     cybersecurity information platform. Join thousands of Indians staying safe online.
                 </p>
-                <div class="d-flex flex-column flex-sm-row gap-3">
-                    <a href="{% url 'cyber_crimes' %}" class="btn btn-light btn-lg px-4 py-3 fw-semibold hover-scale">
+                <div class="d-flex flex-column flex-sm-row gap-3 hero-buttons">
+                    <a href="{% url 'cyber_crimes' %}" class="btn btn-light btn-lg px-4 py-3 fw-semibold hover-scale hero-btn">
                         <i class="fas fa-exclamation-triangle me-2"></i>Explore Cyber Crimes
                     </a>
-                    <a href="{% url 'report_crime' %}" class="btn btn-danger btn-lg px-4 py-3 fw-semibold hover-scale">
+                    <a href="{% url 'report_crime' %}" class="btn btn-danger btn-lg px-4 py-3 fw-semibold hover-scale hero-btn">
                         <i class="fas fa-phone me-2"></i>Report Crime
                     </a>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 hero-visual">
                 <div class="text-center">
-                    <i class="fas fa-shield-alt" style="font-size: 15rem; opacity: 0.3;"></i>
+                    <i class="fas fa-shield-alt hero-icon" style="font-size: 15rem; opacity: 0.3;"></i>
                 </div>
             </div>
         </div>
@@ -84,11 +220,11 @@
 </section>
 
 <!-- Features Section -->
-<section class="py-5">
+<section class="py-5 features-section">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Comprehensive Cyber Protection</h2>
-            <p class="lead text-muted">
+        <div class="text-center mb-5 features-header">
+            <h2 class="display-5 fw-bold mb-3 features-title">Comprehensive Cyber Protection</h2>
+            <p class="lead text-muted features-subtitle">
                 Everything you need to stay safe online, from detailed crime information 
                 to instant incident reporting.
             </p>
@@ -96,46 +232,46 @@
         
         <div class="row g-4">
             <div class="col-lg-3 col-md-6">
-                <div class="card border-0 shadow-sm h-100 hover-scale">
+                <div class="card border-0 shadow-sm h-100 hover-scale feature-card">
                     <div class="card-body text-center p-4">
-                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 feature-icon" style="width: 60px; height: 60px;">
                             <i class="fas fa-exclamation-triangle fa-2x text-warning"></i>
                         </div>
-                        <h5 class="fw-bold mb-3">Crime Awareness</h5>
-                        <p class="text-muted">Comprehensive information about cyber threats and prevention strategies</p>
+                        <h5 class="fw-bold mb-3 feature-title">Crime Awareness</h5>
+                        <p class="text-muted feature-description">Comprehensive information about cyber threats and prevention strategies</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
-                <div class="card border-0 shadow-sm h-100 hover-scale">
+                <div class="card border-0 shadow-sm h-100 hover-scale feature-card">
                     <div class="card-body text-center p-4">
-                        <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 feature-icon" style="width: 60px; height: 60px;">
                             <i class="fas fa-phone fa-2x text-danger"></i>
                         </div>
-                        <h5 class="fw-bold mb-3">Easy Reporting</h5>
-                        <p class="text-muted">Quick access to official reporting channels and emergency helplines</p>
+                        <h5 class="fw-bold mb-3 feature-title">Easy Reporting</h5>
+                        <p class="text-muted feature-description">Quick access to official reporting channels and emergency helplines</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
-                <div class="card border-0 shadow-sm h-100 hover-scale">
+                <div class="card border-0 shadow-sm h-100 hover-scale feature-card">
                     <div class="card-body text-center p-4">
-                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 feature-icon" style="width: 60px; height: 60px;">
                             <i class="fas fa-bolt fa-2x text-success"></i>
                         </div>
-                        <h5 class="fw-bold mb-3">Real-time Updates</h5>
-                        <p class="text-muted">Latest cyber threat intelligence and security advisories</p>
+                        <h5 class="fw-bold mb-3 feature-title">Real-time Updates</h5>
+                        <p class="text-muted feature-description">Latest cyber threat intelligence and security advisories</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
-                <div class="card border-0 shadow-sm h-100 hover-scale">
+                <div class="card border-0 shadow-sm h-100 hover-scale feature-card">
                     <div class="card-body text-center p-4">
-                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 feature-icon" style="width: 60px; height: 60px;">
                             <i class="fas fa-shield-alt fa-2x text-primary"></i>
                         </div>
-                        <h5 class="fw-bold mb-3">Expert Guidance</h5>
-                        <p class="text-muted">Professional cybersecurity advice and incident response support</p>
+                        <h5 class="fw-bold mb-3 feature-title">Expert Guidance</h5>
+                        <p class="text-muted feature-description">Professional cybersecurity advice and incident response support</p>
                     </div>
                 </div>
             </div>
