@@ -2,33 +2,124 @@
 
 {% block title %}Cyber Crime Information Center - CySafe{% endblock %}
 
+{% block extra_css %}
+<style>
+    .hero-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-header .container {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .search-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border: none;
+    }
+    
+    .search-input {
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+    }
+    
+    .search-input:focus {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .search-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        color: white;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .search-btn:hover {
+        transform: translateY(-1px);
+    }
+    
+    .filter-select {
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+        background: white;
+    }
+    
+    .filter-select:focus {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stats-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border: none;
+        transition: all 0.2s ease;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+    
+    .stats-number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+    
+    .stats-label {
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        opacity: 0.7;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- Header Section -->
-<section class="bg-light py-5">
+<!-- Hero Header Section -->
+<section class="hero-header py-4">
     <div class="container">
-        <div class="text-center mb-5">
-            <h1 class="display-4 fw-bold text-dark mb-3">Cyber Crime Information Center</h1>
-            <p class="lead text-muted">
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold mb-3">Cyber Crime Information Center</h1>
+            <p class="lead opacity-90 mb-4">
                 Learn about different types of cyber crimes, how to protect yourself, 
                 and what to do if you become a victim.
             </p>
         </div>
 
         <!-- Search and Filter -->
-        <div class="card border-0 shadow-sm mb-5">
-            <div class="card-body p-4">
+        <div class="search-card mb-4">
+            <div class="card-body p-3">
                 <div class="row g-3">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="input-group">
-                            <span class="input-group-text bg-primary text-white">
-                                <i class="fas fa-search"></i>
-                            </span>
-                            <input type="text" class="form-control" id="search-input" 
+                            <input type="text" class="form-control search-input" id="search-input" 
                                    placeholder="Search cyber crimes..." value="{{ search_query }}">
+                            <button class="btn search-btn" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <select class="form-select" id="category-filter">
+                    <div class="col-md-4">
+                        <select class="form-select filter-select" id="category-filter">
                             <option value="">All Categories</option>
                             {% for value, label in categories %}
                                 <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>
@@ -42,36 +133,36 @@
         </div>
 
         <!-- Stats -->
-        <div class="row g-4 mb-5">
+        <div class="row g-3 mb-4">
             <div class="col-md-3 col-6">
-                <div class="card border-0 shadow-sm text-center">
-                    <div class="card-body">
-                        <h3 class="fw-bold text-danger">2.5L+</h3>
-                        <p class="text-muted mb-0">Cases Reported</p>
+                <div class="stats-card text-center">
+                    <div class="card-body p-3">
+                        <div class="stats-number text-danger">2.5L+</div>
+                        <div class="stats-label text-muted">Cases Reported</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-6">
-                <div class="card border-0 shadow-sm text-center">
-                    <div class="card-body">
-                        <h3 class="fw-bold text-warning">₹10K Cr</h3>
-                        <p class="text-muted mb-0">Losses Prevented</p>
+                <div class="stats-card text-center">
+                    <div class="card-body p-3">
+                        <div class="stats-number text-warning">₹10K Cr</div>
+                        <div class="stats-label text-muted">Losses Prevented</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-6">
-                <div class="card border-0 shadow-sm text-center">
-                    <div class="card-body">
-                        <h3 class="fw-bold text-success">85%</h3>
-                        <p class="text-muted mb-0">Recovery Rate</p>
+                <div class="stats-card text-center">
+                    <div class="card-body p-3">
+                        <div class="stats-number text-success">85%</div>
+                        <div class="stats-label text-muted">Recovery Rate</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-6">
-                <div class="card border-0 shadow-sm text-center">
-                    <div class="card-body">
-                        <h3 class="fw-bold text-primary">24/7</h3>
-                        <p class="text-muted mb-0">Support Available</p>
+                <div class="stats-card text-center">
+                    <div class="card-body p-3">
+                        <div class="stats-number text-primary">24/7</div>
+                        <div class="stats-label text-muted">Support Available</div>
                     </div>
                 </div>
             </div>
