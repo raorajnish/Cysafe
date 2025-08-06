@@ -19,7 +19,7 @@ import requests
 import re
 from .models import (
     AdminUser, CyberCrime, ChatbotKnowledgeBase, 
-    ChatbotConfig, AuditLog, UserReport
+    ChatbotConfig, AuditLog
 )
 from .utils import log_audit_action, get_client_ip, sanitize_input
 
@@ -28,18 +28,11 @@ def home(request):
     """Home page view"""
     # Get statistics
     total_crimes = CyberCrime.objects.count()
-    total_reports = UserReport.objects.count()
-    pending_reports = UserReport.objects.filter(status='new').count()
-    resolved_reports = UserReport.objects.filter(status='resolved').count()
-    
     
     trending_crimes = CyberCrime.objects.order_by('-learn_more_clicks')[:4]
     
     context = {
         'total_crimes': total_crimes,
-        'total_reports': total_reports,
-        'pending_reports': pending_reports,
-        'resolved_reports': resolved_reports,
         'trending_crimes': trending_crimes,
     }
     return render(request, 'main/home.html', context)
@@ -104,16 +97,7 @@ def report_crime(request):
         contact_phone = request.POST.get('contact_phone')
         urgency = request.POST.get('urgency', 'medium')
         
-        # Create user report
-        UserReport.objects.create(
-            report_type=report_type,
-            description=description,
-            contact_name=contact_name,
-            contact_email=contact_email,
-            contact_phone=contact_phone,
-            priority=urgency
-        )
-        
+        # For now, just show success message without creating report
         messages.success(request, 'Your report has been submitted successfully.')
         return redirect('report_crime')
     
@@ -187,9 +171,6 @@ def admin_dashboard(request):
     """Admin dashboard"""
     # Get statistics
     total_crimes = CyberCrime.objects.count()
-    total_reports = UserReport.objects.count()
-    pending_reports = UserReport.objects.filter(status='new').count()
-    resolved_reports = UserReport.objects.filter(status='resolved').count()
     
     # Get trending crimes
     trending_crimes = CyberCrime.objects.order_by('-learn_more_clicks')[:5]
@@ -199,9 +180,6 @@ def admin_dashboard(request):
     
     context = {
         'total_crimes': total_crimes,
-        'total_reports': total_reports,
-        'pending_reports': pending_reports,
-        'resolved_reports': resolved_reports,
         'trending_crimes': trending_crimes,
         'recent_activity': recent_activity,
     }
@@ -426,35 +404,7 @@ def crime_data_api(request, crime_id):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-@login_required
-def admin_reports(request):
-    """Admin reports management"""
-    reports = UserReport.objects.all()
-    
-    if request.method == 'POST':
-        report_id = request.POST.get('report_id')
-        status = request.POST.get('status')
-        priority = request.POST.get('priority')
-        
-        report = get_object_or_404(UserReport, id=report_id)
-        report.status = status
-        report.priority = priority
-        report.save()
-        
-        log_audit_action(
-            request.user, 'UPDATE_STATUS', 'user_reports', report.id,
-            {'status': status, 'priority': priority}
-        )
-        
-        messages.success(request, 'Report status updated successfully.')
-        return redirect('admin_reports')
-    
-    context = {
-        'reports': reports,
-        'status_choices': UserReport.STATUS_CHOICES,
-        'priority_choices': UserReport.PRIORITY_CHOICES,
-    }
-    return render(request, 'admin/reports.html', context)
+
 
 
 @login_required

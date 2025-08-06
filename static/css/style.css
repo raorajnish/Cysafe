@@ -462,6 +462,7 @@ footer .bg-white.bg-opacity-10:hover {
 .admin-content {
     background: #f8f9fa;
     min-height: 100vh;
+    padding-top: 2rem;
 }
 
 .stats-card {
