@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CySafe - India's Cybersecurity Platform{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    {% load static %}
+    {% load static %}
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% csrf_token %}
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary-light shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'home' %}">
+                <i class="fas fa-shield-alt me-2"></i>CySafe
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active fw-semibold{% endif %}" href="{% url 'home' %}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'cyber_crimes' %}active fw-semibold{% endif %}" href="{% url 'cyber_crimes' %}">
+                            <i class="fas fa-exclamation-triangle me-1"></i>Cyber Crimes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'report_crime' %}active fw-semibold{% endif %}" href="{% url 'report_crime' %}">
+                            <i class="fas fa-flag me-1"></i>Report Crime
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active fw-semibold{% endif %}" href="{% url 'contact' %}">
+                            <i class="fas fa-envelope me-1"></i>Contact
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-primary fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-shield me-1"></i>{{ user.email|truncatechars:20 }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                <li><a class="dropdown-item" href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                                <li><a class="dropdown-item" href="{% url 'admin_crimes' %}"><i class="fas fa-list me-2"></i>Manage Crimes</a></li>
+                                <li><a class="dropdown-item" href="{% url 'admin_reports' %}"><i class="fas fa-file-alt me-2"></i>Reports</a></li>
+                                <li><a class="dropdown-item" href="{% url 'admin_chatbot' %}"><i class="fas fa-robot me-2"></i>Chatbot</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'admin_logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-primary btn-sm px-3" href="{% url 'admin_login' %}">
+                                <i class="fas fa-lock me-1"></i>Admin Login
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-primary text-white py-5 mt-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-shield-alt fa-2x me-3 text-warning"></i>
+                        <h4 class="fw-bold mb-0">CySafe</h4>
+                    </div>
+                    <p class="opacity-75 mb-3">India's comprehensive cybersecurity platform powered by DeepCytes AI intelligence. Protecting citizens through education, awareness, and advanced threat detection.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white opacity-75 hover-scale"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white opacity-75 hover-scale"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="text-white opacity-75 hover-scale"><i class="fab fa-facebook fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-bold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{% url 'cyber_crimes' %}" class="text-white opacity-75 text-decoration-none hover-link">Cyber Crimes</a></li>
+                        <li class="mb-2"><a href="{% url 'report_crime' %}" class="text-white opacity-75 text-decoration-none hover-link">Report Crime</a></li>
+                        <li class="mb-2"><a href="{% url 'contact' %}" class="text-white opacity-75 text-decoration-none hover-link">Contact</a></li>
+                        <li class="mb-2"><a href="{% url 'admin_login' %}" class="text-white opacity-75 text-decoration-none hover-link">Admin Panel</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="fw-bold mb-3">Emergency Contacts</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-phone bg-warning text-dark rounded-circle p-2 me-3"></i>
+                                <div>
+                                    <div class="fw-semibold">Cyber Crime</div>
+                                    <div class="opacity-75">1930</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mb-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-phone bg-danger text-white rounded-circle p-2 me-3"></i>
+                                <div>
+                                    <div class="fw-semibold">Emergency</div>
+                                    <div class="opacity-75">112</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mb-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-phone bg-success text-white rounded-circle p-2 me-3"></i>
+                                <div>
+                                    <div class="fw-semibold">Women Helpline</div>
+                                    <div class="opacity-75">181</div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="fw-bold mb-3">Get Help</h6>
+                    <div class="bg-white bg-opacity-10 rounded p-3 mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-robot text-warning me-2"></i>
+                            <span class="fw-semibold">AI Assistant</span>
+                        </div>
+                        <p class="small opacity-75 mb-0">Chat with our AI assistant for instant cybersecurity guidance and support.</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 rounded p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-graduation-cap text-info me-2"></i>
+                            <span class="fw-semibold">Learn More</span>
+                        </div>
+                        <p class="small opacity-75 mb-0">Explore our comprehensive cybersecurity resources and educational content.</p>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 opacity-25">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 opacity-75">&copy; 2024 CySafe. Built with ❤️ by <a href="https://www.deepcytes.io" class="text-warning text-decoration-none" target="_blank">DeepCytes</a>.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex gap-3 justify-content-md-end">
+                        <a href="#" class="text-white opacity-75 text-decoration-none small">Privacy Policy</a>
+                        <a href="#" class="text-white opacity-75 text-decoration-none small">Terms of Service</a>
+                        <a href="https://www.deepcytes.io" class="text-warning text-decoration-none small" target="_blank">
+                            <i class="fas fa-external-link-alt me-1"></i>DeepCytes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

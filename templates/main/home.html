@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block title %}CySafe - India's Cybersecurity Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="mb-4">
+                    <span class="badge bg-light text-primary px-3 py-2 mb-3">
+                        <i class="fas fa-shield-alt me-2"></i>India's Cyber Security Platform
+                    </span>
+                </div>
+                <h1 class="display-4 fw-bold mb-4">
+                    Stay Safe in the
+                    <span class="text-warning">Digital World</span>
+                </h1>
+                <p class="lead mb-4">
+                    Learn about cyber crimes, get expert guidance, and report incidents with India's most comprehensive 
+                    cybersecurity information platform. Join thousands of Indians staying safe online.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3">
+                    <a href="{% url 'cyber_crimes' %}" class="btn btn-light btn-lg px-4 py-3 fw-semibold hover-scale">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Explore Cyber Crimes
+                    </a>
+                    <a href="{% url 'report_crime' %}" class="btn btn-danger btn-lg px-4 py-3 fw-semibold hover-scale">
+                        <i class="fas fa-phone me-2"></i>Report Crime
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <i class="fas fa-shield-alt" style="font-size: 15rem; opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-4">
+                <div class="card border-0 shadow-sm h-100 stats-card">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                        <h3 class="fw-bold text-primary">{{ total_crimes|default:"25" }}+</h3>
+                        <p class="text-muted mb-0">Crime Types Documented</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="card border-0 shadow-sm h-100 stats-card">
+                    <div class="card-body">
+                        <i class="fas fa-file-alt fa-3x text-success mb-3"></i>
+                        <h3 class="fw-bold text-success">{{ total_reports|default:"15,000" }}+</h3>
+                        <p class="text-muted mb-0">Reports Processed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="card border-0 shadow-sm h-100 stats-card">
+                    <div class="card-body">
+                        <i class="fas fa-shield-alt fa-3x text-warning mb-3"></i>
+                        <h3 class="fw-bold text-warning">{{ pending_reports|default:"100,000" }}+</h3>
+                        <p class="text-muted mb-0">Threats Prevented</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="card border-0 shadow-sm h-100 stats-card">
+                    <div class="card-body">
+                        <i class="fas fa-clock fa-3x text-info mb-3"></i>
+                        <h3 class="fw-bold text-info">24/7</h3>
+                        <p class="text-muted mb-0">Support Available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Comprehensive Cyber Protection</h2>
+            <p class="lead text-muted">
+                Everything you need to stay safe online, from detailed crime information 
+                to instant incident reporting.
+            </p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100 hover-scale">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-exclamation-triangle fa-2x text-warning"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Crime Awareness</h5>
+                        <p class="text-muted">Comprehensive information about cyber threats and prevention strategies</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100 hover-scale">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-phone fa-2x text-danger"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Easy Reporting</h5>
+                        <p class="text-muted">Quick access to official reporting channels and emergency helplines</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100 hover-scale">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-bolt fa-2x text-success"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Real-time Updates</h5>
+                        <p class="text-muted">Latest cyber threat intelligence and security advisories</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100 hover-scale">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-shield-alt fa-2x text-primary"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Expert Guidance</h5>
+                        <p class="text-muted">Professional cybersecurity advice and incident response support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Emergency Contact Section -->
+<section class="emergency-section py-5">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="bg-white bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                    <i class="fas fa-phone fa-3x"></i>
+                </div>
+                <h2 class="display-6 fw-bold mb-4">Emergency? Need Immediate Help?</h2>
+                <p class="lead mb-5">
+                    If you're facing an active cyber attack or urgent security threat, 
+                    contact our emergency helplines immediately.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                    <a href="tel:1930" class="btn btn-light btn-lg px-4 py-3 fw-bold hover-scale">
+                        <i class="fas fa-phone me-2"></i>Cyber Helpline: 1930
+                    </a>
+                    <a href="tel:112" class="btn btn-dark btn-lg px-4 py-3 fw-bold hover-scale">
+                        <i class="fas fa-phone me-2"></i>Emergency: 112
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Trending Crimes Section -->
+{% if trending_crimes %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold mb-3">Trending Cyber Threats</h2>
+            <p class="text-muted">Most viewed cyber crime types this week</p>
+        </div>
+        
+        <div class="row g-4">
+            {% for crime in trending_crimes %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-lg h-100 hover-scale crime-card-enhanced severity-{{ crime.severity|lower }}-bg">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-exclamation-triangle text-danger"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold crime-title mb-1">{{ crime.type }}</h6>
+                                    <small class="text-muted">{{ crime.get_category_display }}</small>
+                                </div>
+                            </div>
+                            <span class="badge severity-{{ crime.severity|lower }}">{{ crime.severity|title }}</span>
+                        </div>
+                        
+                        <p class="text-muted crime-description mb-3">{{ crime.description|truncatechars:120 }}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-eye me-1"></i>{{ crime.learn_more_clicks }} views
+                            </small>
+                            <a href="{% url 'crime_detail' crime.id %}" class="btn btn-outline-primary btn-sm" 
+                               onclick="incrementClicks('{{ crime.id }}')">
+                                Learn More <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %} 

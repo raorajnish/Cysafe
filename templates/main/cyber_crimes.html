@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %}Cyber Crime Information Center - CySafe{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-dark mb-3">Cyber Crime Information Center</h1>
+            <p class="lead text-muted">
+                Learn about different types of cyber crimes, how to protect yourself, 
+                and what to do if you become a victim.
+            </p>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="card border-0 shadow-sm mb-5">
+            <div class="card-body p-4">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-primary text-white">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control" id="search-input" 
+                                   placeholder="Search cyber crimes..." value="{{ search_query }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-select" id="category-filter">
+                            <option value="">All Categories</option>
+                            {% for value, label in categories %}
+                                <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3 col-6">
+                <div class="card border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <h3 class="fw-bold text-danger">2.5L+</h3>
+                        <p class="text-muted mb-0">Cases Reported</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <h3 class="fw-bold text-warning">₹10K Cr</h3>
+                        <p class="text-muted mb-0">Losses Prevented</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <h3 class="fw-bold text-success">85%</h3>
+                        <p class="text-muted mb-0">Recovery Rate</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <h3 class="fw-bold text-primary">24/7</h3>
+                        <p class="text-muted mb-0">Support Available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Crimes Grid -->
+<section class="py-5">
+    <div class="container">
+        {% if page_obj %}
+            <div class="row g-4">
+                {% for crime in page_obj %}
+                <div class="col-lg-4 col-md-6 crime-card" data-category="{{ crime.category }}">
+                    <div class="card border-0 shadow-lg h-100 hover-scale crime-card-enhanced severity-{{ crime.severity|lower }}-bg">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-exclamation-triangle text-danger"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold crime-title mb-1">{{ crime.type }}</h6>
+                                        <small class="text-muted">{{ crime.get_category_display }}</small>
+                                    </div>
+                                </div>
+                                <span class="badge severity-{{ crime.severity|lower }}">{{ crime.severity|title }}</span>
+                            </div>
+                            
+                            <p class="text-muted crime-description mb-3">{{ crime.description|truncatechars:120 }}</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">{{ crime.get_prevention_tips_count }} prevention tips</small>
+                                <a href="{% url 'crime_detail' crime.id %}" class="btn btn-outline-primary btn-sm" 
+                                   onclick="incrementClicks('{{ crime.id }}')">
+                                    Learn More <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-4x text-muted mb-4"></i>
+                <h3 class="text-muted">No cyber crimes found</h3>
+                <p class="text-muted">Try adjusting your search criteria or browse all categories.</p>
+                <a href="{% url 'cyber_crimes' %}" class="btn btn-primary">View All Crimes</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Emergency Section -->
+<section class="emergency-section py-5">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <i class="fas fa-exclamation-triangle fa-4x mb-4"></i>
+                <h2 class="display-6 fw-bold mb-4">Emergency? Report Immediately!</h2>
+                <p class="lead mb-5">
+                    If you're currently facing a cyber attack or have been victimized, 
+                    don't wait. Report it immediately through official channels.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                    <a href="https://cybercrime.gov.in" target="_blank" class="btn btn-light btn-lg px-4 py-3 fw-bold hover-scale">
+                        <i class="fas fa-external-link-alt me-2"></i>Cybercrime Portal
+                    </a>
+                    <a href="tel:1930" class="btn btn-dark btn-lg px-4 py-3 fw-bold hover-scale">
+                        <i class="fas fa-phone me-2"></i>Call 1930
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

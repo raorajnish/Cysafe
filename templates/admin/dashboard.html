@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - CySafe{% endblock %}
+
+{% block content %}
+<div class="admin-content">
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="h3 fw-bold text-dark mb-1">Security Dashboard</h1>
+                        <p class="text-muted">Real-time monitoring and analytics for CyberSafe platform</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary" onclick="location.reload()">
+                            <i class="fas fa-sync-alt me-2"></i>Refresh
+                        </button>
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-external-link-alt me-2"></i>View Site
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Status Banner -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 bg-gradient-primary text-white">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="mb-2">System Security Status</h5>
+                                <p class="mb-0 opacity-75">All systems operational • Last security scan: 2 hours ago</p>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <div class="h4 mb-1">99.9%</div>
+                                        <small class="opacity-75">Uptime</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="h4 mb-1">0</div>
+                                        <small class="opacity-75">Threats</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <i class="fas fa-shield-alt fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm stats-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Total Cyber Crimes</p>
+                                <h3 class="fw-bold text-danger mb-1">{{ total_crimes }}</h3>
+                                <small class="text-success">
+                                    <i class="fas fa-arrow-up me-1"></i>+12.5%
+                                </small>
+                            </div>
+                            <div class="bg-danger bg-opacity-10 rounded p-3">
+                                <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm stats-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">User Reports</p>
+                                <h3 class="fw-bold text-primary mb-1">{{ total_reports }}</h3>
+                                <small class="text-success">
+                                    <i class="fas fa-arrow-up me-1"></i>+8.2%
+                                </small>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 rounded p-3">
+                                <i class="fas fa-file-alt fa-2x text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm stats-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Pending Reports</p>
+                                <h3 class="fw-bold text-warning mb-1">{{ pending_reports }}</h3>
+                                <small class="text-danger">
+                                    <i class="fas fa-arrow-down me-1"></i>-5.3%
+                                </small>
+                            </div>
+                            <div class="bg-warning bg-opacity-10 rounded p-3">
+                                <i class="fas fa-clock fa-2x text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm stats-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Resolved Cases</p>
+                                <h3 class="fw-bold text-success mb-1">{{ resolved_reports }}</h3>
+                                <small class="text-success">
+                                    <i class="fas fa-arrow-up me-1"></i>+15.7%
+                                </small>
+                            </div>
+                            <div class="bg-success bg-opacity-10 rounded p-3">
+                                <i class="fas fa-check-circle fa-2x text-success"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Recent Activity -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-transparent border-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Recent Admin Activity</h5>
+                            <i class="fas fa-activity text-muted"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            {% for activity in recent_activity %}
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex align-items-start">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-edit text-primary"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-1">
+                                            <strong>{{ activity.action }}</strong> on 
+                                            <strong>{{ activity.resource_type }}</strong>
+                                        </p>
+                                        <small class="text-muted">
+                                            by {{ activity.admin_user.email }} • {{ activity.timestamp|timesince }} ago
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-activity fa-2x text-muted mb-2"></i>
+                                <p class="text-muted">No recent activity</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Health -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-transparent border-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">System Health</h5>
+                            <i class="fas fa-chart-bar text-muted"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle text-success me-3"></i>
+                                        <span class="fw-medium">Database</span>
+                                    </div>
+                                    <span class="badge bg-success">Operational</span>
+                                </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle text-success me-3"></i>
+                                        <span class="fw-medium">Authentication</span>
+                                    </div>
+                                    <span class="badge bg-success">Secure</span>
+                                </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle text-success me-3"></i>
+                                        <span class="fw-medium">API Services</span>
+                                    </div>
+                                    <span class="badge bg-success">Online</span>
+                                </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-clock text-warning me-3"></i>
+                                        <span class="fw-medium">Backup System</span>
+                                    </div>
+                                    <span class="badge bg-warning">Scheduled</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-0 bg-gradient-secondary text-white">
+                    <div class="card-body p-4">
+                        <h5 class="mb-4">Quick Security Actions</h5>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <a href="{% url 'admin_crimes' %}" class="btn btn-light btn-opacity-75 w-100 text-start">
+                                    <i class="fas fa-file-alt mb-2 d-block"></i>
+                                    <strong>Manage Crimes</strong>
+                                    <small class="d-block opacity-75">Update crime database</small>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="{% url 'admin_reports' %}" class="btn btn-light btn-opacity-75 w-100 text-start">
+                                    <i class="fas fa-exclamation-triangle mb-2 d-block"></i>
+                                    <strong>Review Reports</strong>
+                                    <small class="d-block opacity-75">Check pending issues</small>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="{% url 'admin_chatbot' %}" class="btn btn-light btn-opacity-75 w-100 text-start">
+                                    <i class="fas fa-robot mb-2 d-block"></i>
+                                    <strong>Chatbot Management</strong>
+                                    <small class="d-block opacity-75">Configure AI assistant</small>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-light btn-opacity-75 w-100 text-start">
+                                    <i class="fas fa-download mb-2 d-block"></i>
+                                    <strong>Export Data</strong>
+                                    <small class="d-block opacity-75">Download reports</small>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ crime.type }} - CySafe{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'cyber_crimes' %}">Cyber Crimes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ crime.type }}</li>
+            </ol>
+        </nav>
+        
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge severity-{{ crime.severity }} me-3">{{ crime.severity|title }}</span>
+                    <span class="badge bg-secondary">{{ crime.get_category_display }}</span>
+                </div>
+                <h1 class="display-4 fw-bold text-dark mb-3">{{ crime.type }}</h1>
+                <p class="lead text-muted mb-4">{{ crime.description }}</p>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'report_crime' %}" class="btn btn-danger btn-lg">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Report This Crime
+                    </a>
+                    <a href="tel:1930" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-phone me-2"></i>Call 1930
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                    <i class="fas fa-exclamation-triangle fa-4x text-danger"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Prevention Tips -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-transparent border-0">
+                        <h3 class="fw-bold text-success mb-0">
+                            <i class="fas fa-shield-alt me-2"></i>Prevention Tips
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            {% if crime.prevention_tip_1 %}
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex">
+                                    <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                                        <i class="fas fa-check text-success"></i>
+                                    </div>
+                                    <p class="mb-2">{{ crime.prevention_tip_1 }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if crime.prevention_tip_2 %}
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex">
+                                    <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                                        <i class="fas fa-check text-success"></i>
+                                    </div>
+                                    <p class="mb-2">{{ crime.prevention_tip_2 }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if crime.prevention_tip_3 %}
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex">
+                                    <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                                        <i class="fas fa-check text-success"></i>
+                                    </div>
+                                    <p class="mb-2">{{ crime.prevention_tip_3 }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if crime.prevention_tip_4 %}
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex">
+                                    <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                                        <i class="fas fa-check text-success"></i>
+                                    </div>
+                                    <p class="mb-2">{{ crime.prevention_tip_4 }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-transparent border-0">
+                        <h3 class="fw-bold text-primary mb-0">
+                            <i class="fas fa-file-alt me-2"></i>Reporting Steps
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            {% if crime.reporting_step_1 %}
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                                        <i class="fas fa-arrow-right text-primary"></i>
+                                    </div>
+                                    <p class="mb-2">{{ crime.reporting_step_1 }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if crime.reporting_step_2 %}
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                                        <i class="fas fa-arrow-right text-primary"></i>
+                                    </div>
+                                    <p class="mb-2">{{ crime.reporting_step_2 }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if crime.reporting_step_3 %}
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                                        <i class="fas fa-arrow-right text-primary"></i>
+                                    </div>
+                                    <p class="mb-2">{{ crime.reporting_step_3 }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if crime.reporting_step_4 %}
+                            <div class="list-group-item border-0 px-0">
+                                <div class="d-flex">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                                        <i class="fas fa-arrow-right text-primary"></i>
+                                    </div>
+                                    <p class="mb-2">{{ crime.reporting_step_4 }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Information -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold mb-3">Related Information</h2>
+            <p class="lead text-muted">Learn more about cybersecurity and protection</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 hover-scale">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-book fa-2x text-warning"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Security Guide</h5>
+                        <p class="text-muted">Comprehensive guide to staying safe online</p>
+                        <a href="#" class="btn btn-outline-warning">Read Guide</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 hover-scale">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-graduation-cap fa-2x text-info"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Training Modules</h5>
+                        <p class="text-muted">Interactive cybersecurity training courses</p>
+                        <a href="#" class="btn btn-outline-info">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 hover-scale">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-tools fa-2x text-success"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Security Tools</h5>
+                        <p class="text-muted">Free tools to check your security status</p>
+                        <a href="#" class="btn btn-outline-success">Use Tools</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Emergency Section -->
+<section class="emergency-section py-5">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <i class="fas fa-exclamation-triangle fa-4x mb-4"></i>
+                <h2 class="display-6 fw-bold mb-4">Been a Victim?</h2>
+                <p class="lead mb-5">
+                    If you've been affected by this type of cyber crime, 
+                    don't wait. Report it immediately and get help.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                    <a href="{% url 'report_crime' %}" class="btn btn-light btn-lg px-4 py-3 fw-bold hover-scale">
+                        <i class="fas fa-file-alt me-2"></i>Report Crime
+                    </a>
+                    <a href="tel:1930" class="btn btn-dark btn-lg px-4 py-3 fw-bold hover-scale">
+                        <i class="fas fa-phone me-2"></i>Call 1930
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Click count is now handled by the onclick event on the Learn More button -->
+{% endblock %} 
