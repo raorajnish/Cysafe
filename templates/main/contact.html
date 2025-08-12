@@ -2,16 +2,175 @@
 
 {% block title %}Contact Us - CySafe{% endblock %}
 
+{% block extra_css %}
+<style>
+    .contact-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.1);
+        background-image: 
+            radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    }
+    
+    .contact-hero .container {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .hero-icon {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    .contact-card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        backdrop-filter: blur(10px);
+    }
+    
+    .contact-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+
+    
+    .contact-info-card {
+        transition: all 0.3s ease;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .contact-info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .contact-info-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .contact-info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .office-card {
+        border-left: 4px solid #667eea;
+        transition: all 0.3s ease;
+    }
+    
+    .office-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border-left-color: #764ba2;
+    }
+    
+    .emergency-section {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        color: white;
+        position: relative;
+    }
+    
+    .emergency-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="rgba(255,255,255,0.1)"><polygon points="1000,0 1000,100 0,100"/></svg>');
+        background-size: cover;
+    }
+    
+
+    
+    .btn-gradient {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-gradient:hover {
+        background: linear-gradient(45deg, #764ba2, #667eea);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        color: white;
+    }
+    
+    .section-title {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border-radius: 2px;
+    }
+    
+    @media (max-width: 768px) {
+        .contact-hero {
+            padding: 3rem 0;
+        }
+        
+        .hero-icon {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .hero-icon i {
+            font-size: 1.5rem;
+        }
+        
+        .contact-card {
+            margin-bottom: 2rem;
+        }
+        
+        .emergency-section {
+            padding: 3rem 0;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Header Section -->
-<section class="bg-light py-5">
+<section class="contact-hero py-5">
     <div class="container">
         <div class="text-center mb-5">
-            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-                <i class="fas fa-phone fa-3x text-primary"></i>
+            <div class="hero-icon rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                <i class="fas fa-phone fa-3x text-white"></i>
             </div>
-            <h1 class="display-4 fw-bold text-dark mb-3">Contact CySafe</h1>
-            <p class="lead text-muted">
+            <h1 class="display-4 fw-bold text-white mb-3">Contact CySafe</h1>
+            <p class="lead text-white opacity-90">
                 Get in touch with our cybersecurity experts for assistance, 
                 reporting incidents, or general inquiries.
             </p>
@@ -24,7 +183,7 @@
     <div class="container">
         <div class="row g-5">
             <div class="col-lg-6">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card contact-card border-0 shadow-sm h-100">
                     <div class="card-body p-4">
                         <h3 class="fw-bold mb-4">
                             <i class="fas fa-exclamation-triangle text-danger me-2"></i>
@@ -101,7 +260,7 @@
             </div>
             
             <div class="col-lg-6">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card contact-card border-0 shadow-sm h-100">
                     <div class="card-body p-4">
                         <h3 class="fw-bold mb-4">
                             <i class="fas fa-info-circle text-primary me-2"></i>
@@ -164,7 +323,7 @@
 <section class="py-5 bg-light">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="display-6 fw-bold mb-3">Get in Touch</h2>
+            <h2 class="display-6 fw-bold mb-3 section-title">Get in Touch</h2>
             <p class="lead text-muted">
                 For general inquiries, technical support, or partnership opportunities
             </p>
@@ -172,14 +331,14 @@
         
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card contact-info-card border-0 shadow-sm h-100 text-center">
                     <div class="card-body p-4">
                         <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                             <i class="fas fa-envelope fa-2x text-primary"></i>
                         </div>
                         <h5 class="fw-bold mb-3">Email Support</h5>
                         <p class="text-muted mb-3">Get technical assistance and general inquiries</p>
-                        <a href="mailto:support@cybersafe.gov.in" class="btn btn-outline-primary">
+                        <a href="mailto:support@cybersafe.gov.in" class="btn btn-gradient">
                             support@cybersafe.gov.in
                         </a>
                     </div>
@@ -187,14 +346,14 @@
             </div>
             
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card contact-info-card border-0 shadow-sm h-100 text-center">
                     <div class="card-body p-4">
                         <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                             <i class="fas fa-shield-alt fa-2x text-success"></i>
                         </div>
                         <h5 class="fw-bold mb-3">Security Team</h5>
                         <p class="text-muted mb-3">Report security vulnerabilities and threats</p>
-                        <a href="mailto:security@cybersafe.gov.in" class="btn btn-outline-success">
+                        <a href="mailto:security@cybersafe.gov.in" class="btn btn-gradient">
                             security@cybersafe.gov.in
                         </a>
                     </div>
@@ -202,14 +361,14 @@
             </div>
             
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card contact-info-card border-0 shadow-sm h-100 text-center">
                     <div class="card-body p-4">
                         <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                             <i class="fas fa-handshake fa-2x text-info"></i>
                         </div>
                         <h5 class="fw-bold mb-3">Partnership</h5>
                         <p class="text-muted mb-3">Business partnerships and collaborations</p>
-                        <a href="mailto:partnership@deepcytes.io" class="btn btn-outline-info">
+                        <a href="mailto:partnership@deepcytes.io" class="btn btn-gradient">
                             partnership@deepcytes.io
                         </a>
                     </div>
@@ -223,7 +382,7 @@
 <section class="py-5">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="display-6 fw-bold mb-3">Our Offices</h2>
+            <h2 class="display-6 fw-bold mb-3 section-title">Our Offices</h2>
             <p class="lead text-muted">
                 Visit our offices for in-person assistance and consultations
             </p>
@@ -231,7 +390,7 @@
         
         <div class="row g-4">
             <div class="col-lg-6">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card office-card border-0 shadow-sm h-100">
                     <div class="card-body p-4">
                         <h5 class="fw-bold mb-3">
                             <i class="fas fa-map-marker-alt text-primary me-2"></i>
@@ -243,7 +402,7 @@
                             Lodhi Road, New Delhi - 110003
                         </p>
                         <div class="d-flex gap-2">
-                            <a href="tel:+911123456789" class="btn btn-outline-primary btn-sm">
+                            <a href="tel:+911123456789" class="btn btn-gradient btn-sm">
                                 <i class="fas fa-phone me-1"></i>Call
                             </a>
                             <a href="https://maps.google.com" target="_blank" class="btn btn-outline-secondary btn-sm">
@@ -255,7 +414,7 @@
             </div>
             
             <div class="col-lg-6">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card office-card border-0 shadow-sm h-100">
                     <div class="card-body p-4">
                         <h5 class="fw-bold mb-3">
                             <i class="fas fa-map-marker-alt text-success me-2"></i>
@@ -267,7 +426,7 @@
                             Mumbai - 400001
                         </p>
                         <div class="d-flex gap-2">
-                            <a href="tel:+912223456789" class="btn btn-outline-success btn-sm">
+                            <a href="tel:+912223456789" class="btn btn-gradient btn-sm">
                                 <i class="fas fa-phone me-1"></i>Call
                             </a>
                             <a href="https://maps.google.com" target="_blank" class="btn btn-outline-secondary btn-sm">
@@ -286,17 +445,19 @@
     <div class="container text-center">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <i class="fas fa-exclamation-triangle fa-4x mb-4"></i>
-                <h2 class="display-6 fw-bold mb-4">Need Immediate Help?</h2>
-                <p class="lead mb-5">
+                <div class="bg-white bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+                    <i class="fas fa-exclamation-triangle fa-4x text-white"></i>
+                </div>
+                <h2 class="display-6 fw-bold mb-4 text-white">Need Immediate Help?</h2>
+                <p class="lead mb-5 text-white opacity-90">
                     If you're currently experiencing a cyber attack or have urgent concerns, 
                     don't hesitate to contact emergency services immediately.
                 </p>
                 <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-                    <a href="tel:1930" class="btn btn-light btn-lg px-4 py-3 fw-bold hover-scale">
+                    <a href="tel:1930" class="btn btn-light btn-lg px-4 py-3 fw-bold">
                         <i class="fas fa-phone me-2"></i>Call Cyber Crime Helpline
                     </a>
-                    <a href="https://cybercrime.gov.in" target="_blank" class="btn btn-dark btn-lg px-4 py-3 fw-bold hover-scale">
+                    <a href="https://cybercrime.gov.in" target="_blank" class="btn btn-outline-light btn-lg px-4 py-3 fw-bold">
                         <i class="fas fa-external-link-alt me-2"></i>Visit Official Portal
                     </a>
                 </div>

@@ -86,22 +86,22 @@ def crime_detail(request, crime_id):
     return render(request, 'main/crime_detail.html', context)
 
 
-def report_crime(request):
-    """Report crime page"""
-    if request.method == 'POST':
-        # Handle report submission
-        report_type = request.POST.get('report_type')
-        description = request.POST.get('description')
-        contact_name = request.POST.get('contact_name')
-        contact_email = request.POST.get('contact_email')
-        contact_phone = request.POST.get('contact_phone')
-        urgency = request.POST.get('urgency', 'medium')
+# def report_crime(request):
+#     """Report crime page"""
+#     if request.method == 'POST':
+#         # Handle report submission
+#         report_type = request.POST.get('report_type')
+#         description = request.POST.get('description')
+#         contact_name = request.POST.get('contact_name')
+#         contact_email = request.POST.get('contact_email')
+#         contact_phone = request.POST.get('contact_phone')
+#         urgency = request.POST.get('urgency', 'medium')
         
-        # For now, just show success message without creating report
-        messages.success(request, 'Your report has been submitted successfully.')
-        return redirect('report_crime')
+#         # For now, just show success message without creating report
+#         messages.success(request, 'Your report has been submitted successfully.')
+#         return redirect('report_crime')
     
-    return render(request, 'main/report_crime.html')
+#     return render(request, 'main/report_crime.html')
 
 
 def contact(request):
