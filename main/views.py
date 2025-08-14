@@ -17,11 +17,15 @@ import uuid
 from datetime import datetime, timedelta
 import requests
 import re
+from dotenv import load_dotenv
+import google.generativeai as genai
 from .models import (
-    AdminUser, CyberCrime, ChatbotKnowledgeBase, 
+    AdminUser, CyberCrime, 
     ChatbotConfig, AuditLog
 )
 from .utils import log_audit_action, get_client_ip, sanitize_input
+
+load_dotenv()
 
 
 def home(request):
@@ -86,22 +90,14 @@ def crime_detail(request, crime_id):
     return render(request, 'main/crime_detail.html', context)
 
 
-# def report_crime(request):
-#     """Report crime page"""
-#     if request.method == 'POST':
-#         # Handle report submission
-#         report_type = request.POST.get('report_type')
-#         description = request.POST.get('description')
-#         contact_name = request.POST.get('contact_name')
-#         contact_email = request.POST.get('contact_email')
-#         contact_phone = request.POST.get('contact_phone')
-#         urgency = request.POST.get('urgency', 'medium')
-        
-#         # For now, just show success message without creating report
-#         messages.success(request, 'Your report has been submitted successfully.')
-#         return redirect('report_crime')
+def report_crime(request):
+    """Report crime page"""
+    if request.method == 'POST':
+        # For now, just show success message without creating a persistent record
+        messages.success(request, 'Your report has been submitted successfully.')
+        return redirect('report_crime')
     
-#     return render(request, 'main/report_crime.html')
+    return render(request, 'main/report_crime.html')
 
 
 def contact(request):
@@ -410,13 +406,12 @@ def crime_data_api(request, crime_id):
 @login_required
 def admin_chatbot(request):
     """Admin chatbot management"""
-    knowledge_items = ChatbotKnowledgeBase.objects.all()
     config = ChatbotConfig.objects.first()
     
     if not config:
         config = ChatbotConfig.objects.create(
-            gemini_model='gemini-2.5-pro',
-            system_prompt="You are CyberSafe AI Assistant, an expert cybersecurity advisor. Provide helpful, accurate information about cyber threats, prevention tips, and reporting procedures. Always prioritize user safety and direct them to official channels when needed."
+            gemini_model='gemini-1.5-flash',
+            system_prompt="You are CyberSafe AI Assistant, an expert cybersecurity advisor. Provide short, crisp responses about cyber threats, prevention tips, and reporting procedures. Only elaborate when specifically asked by the user. Always prioritize user safety and direct them to official channels when needed. Use bullet points for clarity and keep responses concise."
         )
     
     if request.method == 'POST':
@@ -425,6 +420,13 @@ def admin_chatbot(request):
             gemini_api_key = request.POST.get('gemini_api_key')
             gemini_model = request.POST.get('gemini_model')
             system_prompt = request.POST.get('system_prompt')
+            
+            print(f"=== FORM SUBMISSION DEBUG ===")
+            print(f"All POST data: {dict(request.POST)}")
+            print(f"API Key: {gemini_api_key[:20] if gemini_api_key else 'None'}...")
+            print(f"Model: {gemini_model}")
+            print(f"System Prompt (full): {repr(system_prompt)}")
+            print(f"System Prompt length: {len(system_prompt) if system_prompt else 0}")
             
             # Validate required fields
             if not gemini_model:
@@ -436,6 +438,12 @@ def admin_chatbot(request):
             config.system_prompt = system_prompt
             config.save()
             
+            print(f"=== AFTER SAVE DEBUG ===")
+            print(f"Saved config ID: {config.id}")
+            print(f"Saved Model: {config.gemini_model}")
+            print(f"Saved System Prompt (full): {repr(config.system_prompt)}")
+            print(f"Saved System Prompt length: {len(config.system_prompt)}")
+            
             log_audit_action(
                 request.user, 'UPDATE', 'chatbot_config', config.id,
                 {'model': gemini_model, 'has_api_key': bool(gemini_api_key)}
@@ -445,56 +453,12 @@ def admin_chatbot(request):
             
             # Refresh the config object to get updated data
             config.refresh_from_db()
-            
-        elif 'add_knowledge' in request.POST:
-            # Add knowledge base item
-            title = request.POST.get('title')
-            content = request.POST.get('content')
-            file_upload = request.FILES.get('file_upload')
-            website_url = request.POST.get('website_url')
-            
-            # Sanitize inputs
-            title = sanitize_input(title)
-            content = sanitize_input(content)
-            
-            file_type = 'Text'
-            if file_upload:
-                file_type = file_upload.name.split('.')[-1].upper()
-                # Here you would process the file and extract content
-                # For now, we'll just use the filename
-                content = f"File: {file_upload.name}\n\n{content}"
-            
-            knowledge_item = ChatbotKnowledgeBase.objects.create(
-                title=title,
-                content=content,
-                file_type=file_type,
-                file_url=website_url
-            )
-            
-            log_audit_action(
-                request.user, 'CREATE', 'chatbot_knowledge', knowledge_item.id,
-                {'title': title, 'file_type': file_type}
-            )
-            
-            messages.success(request, 'Knowledge base item added successfully.')
-            
-        elif 'delete_id' in request.POST:
-            # Delete knowledge base item
-            delete_id = request.POST.get('delete_id')
-            knowledge_item = get_object_or_404(ChatbotKnowledgeBase, id=delete_id)
-            knowledge_item.delete()
-            
-            log_audit_action(
-                request.user, 'DELETE', 'chatbot_knowledge', delete_id,
-                {'title': knowledge_item.title}
-            )
-            
-            messages.success(request, 'Knowledge base item deleted successfully.')
+            print(f"=== AFTER REFRESH DEBUG ===")
+            print(f"Refreshed System Prompt: {repr(config.system_prompt)}")
         
         return redirect('admin_chatbot')
     
     context = {
-        'knowledge_items': knowledge_items,
         'config': config,
         'total_conversations': 0,  # Placeholder
         'avg_response_time': 2.5,  # Placeholder
@@ -503,214 +467,91 @@ def admin_chatbot(request):
     return render(request, 'admin/chatbot.html', context)
 
 
-@login_required
-def test_chatbot(request):
-    """Test chatbot interface for admins"""
-    config = ChatbotConfig.objects.first()
-    knowledge_items = ChatbotKnowledgeBase.objects.all()
-    
-    context = {
-        'config': config,
-        'knowledge_items': knowledge_items,
-        'knowledge_count': knowledge_items.count(),
-    }
-    return render(request, 'admin/test_chatbot.html', context)
-
-
 @csrf_exempt
 @require_http_methods(["POST"])
 def chatbot_api(request):
-    """Chatbot API endpoint"""
+    """Chatbot API endpoint - forwards user prompt to Gemini with system prompt from config"""
     try:
         data = json.loads(request.body)
-        user_message = data.get('message', '')
-        
-        # Get chatbot config
+        user_message = data.get('message', '').strip()
+
+        if not user_message:
+            return JsonResponse({'response': 'Please enter a message.'})
+
+        # Load or create config
         config = ChatbotConfig.objects.first()
         if not config:
-            # Create default config if none exists
             config = ChatbotConfig.objects.create(
-                gemini_model='gemini-2.5-pro',
-                system_prompt="You are CyberSafe AI Assistant, an expert cybersecurity advisor."
+                gemini_model='gemini-1.5-pro',
+                system_prompt="You are CyberSafe AI Assistant, an expert cybersecurity advisor. Provide short, crisp responses about cyber threats, prevention tips, and reporting procedures. Only elaborate when specifically asked by the user. Always prioritize user safety and direct them to official channels when needed. Use bullet points for clarity and keep responses concise."
             )
+
+        if not config.gemini_api_key:
+            return JsonResponse({
+                'response': 'The AI assistant is not configured yet. Please ask an admin to set the Gemini API key in the Chatbot settings.'
+            })
+
+        # Configure Gemini with stored API key
+        genai.configure(api_key=config.gemini_api_key)
+        print(f"Gemini configured with API key: {config.gemini_api_key[:20]}...")
+
+        # Use the saved model from config
+        model_id = config.gemini_model or 'gemini-1.5-flash'
+        print(f"Using model: {model_id}")
+        print(f"System prompt: {config.system_prompt[:100]}...")
         
-        # Get knowledge base (remove is_active filter for now)
-        knowledge_base = ChatbotKnowledgeBase.objects.all()
+        try:
+            # Create model without system instruction for better compatibility
+            model = genai.GenerativeModel(model_id)
+            print("Model created successfully")
+        except Exception as e:
+            print(f"Error creating model: {e}")
+            return JsonResponse({
+                'response': f'Error creating AI model: {str(e)}. Please try again.'
+            }, status=500)
         
-        # Generate response (works with or without API key)
-        response = generate_chatbot_response(user_message, knowledge_base, config)
-        
-        return JsonResponse({
-            'response': response,
-            'links': []
-        })
-        
+        try:
+            # Prepare the full message with system prompt
+            full_message = f"{config.system_prompt}\n\nUser: {user_message}\n\nAssistant:"
+            print(f"Sending message to Gemini: {full_message[:100]}...")
+            
+            # Generate response
+            response = model.generate_content(full_message)
+            print("Response received from Gemini")
+            
+            # Extract text from response
+            if response and response.text:
+                text = response.text.strip()
+                print(f"Extracted text: {text[:100]}...")
+                return JsonResponse({'response': text, 'links': []})
+            else:
+                print("No text in response")
+                return JsonResponse({'response': 'Sorry, I received an empty response. Please try again.'})
+                
+        except Exception as e:
+            print(f"Error generating content: {e}")
+            
+            # Handle specific quota errors
+            if "429" in str(e) or "quota" in str(e).lower():
+                return JsonResponse({
+                    'response': 'I\'m currently experiencing high demand. Please wait a moment and try again, or contact support if this persists.'
+                })
+            elif "400" in str(e) or "invalid" in str(e).lower():
+                return JsonResponse({
+                    'response': 'I encountered an issue with your request. Please try rephrasing your question.'
+                })
+            else:
+                return JsonResponse({
+                    'response': f'Sorry, I encountered an error: {str(e)}. Please try again or check the server logs.'
+                })
+
     except Exception as e:
+        import traceback
+        print(f"Chatbot API Error: {str(e)}")
+        print(f"Traceback: {traceback.format_exc()}")
         return JsonResponse({
-            'response': 'Sorry, I encountered an error. Please try again.',
-            'links': []
-        })
-
-
-def generate_chatbot_response(user_message, knowledge_base, config):
-    """Generate chatbot response based on user message and knowledge base"""
-    user_message_lower = user_message.lower()
-    
-    # Enhanced keyword-based responses with more context
-    if any(word in user_message_lower for word in ['phishing', 'email fraud', 'suspicious email']):
-        return """🚨 **Phishing Alert!** 
-
-Phishing is a cyber attack where attackers impersonate legitimate organizations to steal sensitive information like passwords, credit card numbers, and personal data.
-
-**What to do if you receive a suspicious email:**
-• Never click on suspicious links
-• Don't download attachments from unknown senders
-• Verify sender email addresses carefully
-• Don't share personal information via email
-• Report phishing attempts to cybercrime.gov.in
-
-**Emergency Contact:** Call 1930 for immediate assistance."""
-
-    elif any(word in user_message_lower for word in ['report', 'complaint', 'file complaint']):
-        return """📋 **How to Report Cyber Crime**
-
-**Step-by-step process:**
-1. **Gather Evidence:** Take screenshots, save emails, note transaction details
-2. **Visit Official Portal:** Go to cybercrime.gov.in
-3. **Call Helpline:** Dial 1930 for immediate assistance
-4. **Contact Bank:** If financial fraud, contact your bank immediately
-5. **File FIR:** Visit local police station if needed
-
-**Important:** Always report within 24 hours for better investigation chances.
-
-**Emergency Numbers:**
-• Cyber Crime: 1930
-• Police Emergency: 112
-• Women Helpline: 181"""
-
-    elif any(word in user_message_lower for word in ['password', 'security', 'strong password']):
-        return """🔐 **Password Security Best Practices**
-
-**Create Strong Passwords:**
-• Use at least 12 characters
-• Include uppercase and lowercase letters
-• Add numbers and special characters
-• Avoid personal information (birthday, name)
-• Use unique passwords for each account
-
-**Additional Security:**
-• Enable two-factor authentication (2FA)
-• Use password managers
-• Never share passwords
-• Change passwords regularly
-• Monitor account activity
-
-**Example Strong Password:** `K9#mP$2xL@vN8!`"""
-
-    elif any(word in user_message_lower for word in ['emergency', 'urgent', 'help', 'hacked']):
-        return """🚨 **EMERGENCY CYBER CRIME RESPONSE**
-
-**Immediate Actions:**
-1. **Disconnect:** Unplug from internet immediately
-2. **Call Emergency:** Dial 1930 for cyber crime helpline
-3. **Contact Bank:** If financial accounts compromised
-4. **Change Passwords:** On a secure device
-5. **Document Everything:** Screenshots, transaction details
-
-**Emergency Contacts:**
-• 🚨 Cyber Crime: **1930**
-• 🚨 Police Emergency: **112**
-• 🚨 Women Helpline: **181**
-• 🚨 Child Helpline: **1098**
-
-**Stay Calm:** Help is available 24/7. Don't panic!"""
-
-    elif any(word in user_message_lower for word in ['ransomware', 'virus', 'malware']):
-        return """🦠 **Ransomware & Malware Protection**
-
-**What is Ransomware?**
-Malicious software that encrypts your files and demands payment to restore access.
-
-**Prevention Tips:**
-• Keep software and systems updated
-• Use reliable antivirus software
-• Regularly backup important data
-• Be cautious with email attachments
-• Don't click on suspicious links
-
-**If Infected:**
-• Don't pay the ransom
-• Disconnect from internet immediately
-• Contact cybersecurity experts
-• Report to cybercrime.gov.in
-• Restore from clean backups if available"""
-
-    elif any(word in user_message_lower for word in ['upi', 'payment', 'fraud', 'bank']):
-        return """💳 **UPI & Payment Fraud Prevention**
-
-**Common UPI Frauds:**
-• Fake payment links
-• QR code scams
-• Impersonation frauds
-• OTP sharing scams
-
-**Safety Measures:**
-• Never share UPI PIN with anyone
-• Verify payment requests independently
-• Use official banking apps only
-• Enable transaction alerts
-• Check payment details carefully
-
-**If Victim:**
-• Immediately block your UPI ID
-• Contact your bank to freeze transactions
-• File complaint with cybercrime.gov.in
-• Report to bank's fraud department"""
-
-    elif any(word in user_message_lower for word in ['social media', 'account hacked', 'facebook', 'instagram']):
-        return """📱 **Social Media Account Security**
-
-**If Account is Hacked:**
-1. **Immediately change password**
-2. **Enable two-factor authentication**
-3. **Report to the platform**
-4. **Check for unauthorized posts/messages**
-5. **Monitor for identity theft signs**
-
-**Prevention:**
-• Use strong, unique passwords
-• Enable 2FA on all accounts
-• Be careful with third-party apps
-• Regularly review account activity
-• Log out from shared devices
-
-**Report to:** cybercrime.gov.in"""
-
-    else:
-        return """🤖 **Welcome to CySafe AI Assistant!**
-
-I'm here to help you with cybersecurity questions and concerns. You can ask me about:
-
-**🔒 Security Topics:**
-• Phishing and email fraud
-• Password security
-• Ransomware protection
-• UPI payment fraud
-• Social media security
-
-**📞 Emergency Help:**
-• How to report cyber crimes
-• Emergency contact numbers
-• Immediate response procedures
-
-**💡 General Guidance:**
-• Prevention tips
-• Best practices
-• Security awareness
-
-**Ask me anything about cybersecurity!** 
-
-*Note: For immediate emergency assistance, call 1930.*"""
+            'response': f'Sorry, I encountered an error: {str(e)}. Please try again or check the server logs.'
+        }, status=500)
 
 
 @csrf_exempt
@@ -728,3 +569,4 @@ def increment_clicks(request):
         return JsonResponse({'success': True})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
+

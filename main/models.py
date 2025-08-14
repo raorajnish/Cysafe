@@ -108,26 +108,6 @@ class CyberCrime(models.Model):
         return steps
 
 
-class ChatbotKnowledgeBase(models.Model):
-    """Model for storing chatbot knowledge base content"""
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=200)
-    content = models.TextField()
-    file_type = models.CharField(max_length=20, blank=True)  # txt, pdf, doc, csv
-    file_url = models.URLField(blank=True)
-    embeddings = models.JSONField(default=list)  # Store vector embeddings
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = 'chatbot_knowledge_base'
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return self.title
-
-
 class ChatbotConfig(models.Model):
     """Model for storing chatbot configuration"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -165,37 +145,4 @@ class AuditLog(models.Model):
         return f"{self.action} on {self.resource_type} by {self.admin_user.email}"
 
 
-class UserReport(models.Model):
-    """Model for storing user reports"""
-    STATUS_CHOICES = [
-        ('new', 'New'),
-        ('reviewed', 'Reviewed'),
-        ('forwarded', 'Forwarded'),
-        ('resolved', 'Resolved'),
-    ]
-    
-    PRIORITY_CHOICES = [
-        ('low', 'Low'),
-        ('medium', 'Medium'),
-        ('high', 'High'),
-        ('urgent', 'Urgent'),
-    ]
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    report_type = models.CharField(max_length=200)
-    description = models.TextField()
-    contact_name = models.CharField(max_length=200)
-    contact_email = models.EmailField()
-    contact_phone = models.CharField(max_length=20, blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
-    priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default='medium')
-    assigned_to = models.ForeignKey(AdminUser, on_delete=models.SET_NULL, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = 'user_reports'
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return f"{self.report_type} - {self.contact_name}"
+# UserReport model removed - not in use
