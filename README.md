@@ -26,6 +26,7 @@ CySafe is a Django-based web application designed to raise awareness about cyber
 
 - Python 3.8 or higher
 - pip (Python package installer)
+- Google Gemini API key (for chatbot functionality)
 
 ### Setup Instructions
 
@@ -76,6 +77,16 @@ CySafe is a Django-based web application designed to raise awareness about cyber
    - Main site: http://127.0.0.1:8000/
    - Admin panel: http://127.0.0.1:8000/admin/
 
+### Chatbot Setup
+
+9. **Configure the AI Chatbot**
+   - Access: http://127.0.0.1:8000/admin/chatbot/
+   - Click "Customize Bot" to configure:
+     - Google Gemini API key
+     - AI model selection (gemini-1.5-flash recommended)
+     - Custom system prompt for cybersecurity guidance
+   - Test the chatbot using the built-in test interface
+
 ## Project Structure
 
 ```
@@ -88,10 +99,13 @@ CySafe-Django/
 │   └── admin.py            # Admin interface
 ├── templates/              # HTML templates
 │   ├── base.html          # Base template
-│   └── main/              # App-specific templates
+│   ├── main/              # App-specific templates
+│   └── admin/             # Admin templates
+│       ├── chatbot.html   # Chatbot admin dashboard
+│       └── customize_bot.html # Bot configuration
 ├── static/                # Static files (CSS, JS, images)
-│   ├── css/
-│   ├── js/
+│   ├── css/               # Stylesheets including chatbot styles
+│   ├── js/                # JavaScript including chatbot functionality
 │   └── images/
 ├── logs/                  # Application logs
 ├── manage.py              # Django management script
@@ -105,16 +119,31 @@ CySafe-Django/
 - Trending crimes based on user engagement
 - Detailed crime descriptions and prevention tips
 
+### AI-Powered Chatbot
+- **Google Gemini Integration**: Powered by Google's latest AI model (gemini-1.5-flash)
+- **Smart Responses**: Context-aware cybersecurity advice and guidance
+- **Indian Focus**: Specialized knowledge of Indian cyber laws and reporting procedures
+- **Real-time Processing**: Instant responses with conversation tracking
+- **Admin Management**: Easy configuration of API keys, models, and system prompts
+- **Conversation Analytics**: Track response times, success rates, and user engagement
+- **URL Detection**: Automatic conversion of links to clickable elements
+- **Markdown Support**: Rich text formatting with bold text and proper line breaks
+
 ### Admin Features
 - Add/edit cyber crimes through admin panel
 - Manage user accounts and permissions
 - View analytics and engagement metrics
+- **Chatbot Configuration**: Customize AI settings and system prompts
+- **Conversation Monitoring**: Track chatbot performance and user interactions
+- **Real-time Statistics**: Monitor total conversations, response times, and satisfaction rates
 
 ### User Interface
 - Modern, responsive design
 - Interactive elements with JavaScript
 - Bootstrap 5 for styling
 - Font Awesome icons
+- **Floating Chatbot Widget**: Always-accessible AI assistant
+- **Responsive Chat Interface**: Works seamlessly on all devices
 
 ## API Endpoints
 
@@ -122,6 +151,11 @@ CySafe-Django/
 - `GET /crime/<id>/` - View detailed crime information
 - `GET /crimes/` - List all cyber crimes
 - `GET /` - Home page with trending crimes
+
+### Chatbot API
+- `POST /api/chatbot/` - AI-powered chatbot responses
+- `GET /admin/chatbot/` - Chatbot admin dashboard
+- `GET /admin/customize-bot/` - Bot configuration management
 
 ## Contributing
 
@@ -141,6 +175,11 @@ For support and questions, please open an issue on the GitHub repository.
 
 ## Recent Updates
 
+- **AI Chatbot Integration**: Complete Google Gemini AI integration with Indian cybersecurity focus
+- **Smart URL Detection**: Automatic conversion of URLs to clickable links in chatbot responses
+- **Conversation Tracking**: Comprehensive logging of user interactions and AI responses
+- **Admin Dashboard**: Real-time chatbot statistics and performance monitoring
+- **System Prompt Management**: Easy customization of AI behavior and knowledge base
 - Fixed view count incrementing issue (was incrementing by 2-3 instead of 1)
 - Added debounce mechanism to prevent rapid clicking
 - Centralized click tracking logic
