@@ -152,11 +152,6 @@ CySafe-Django/
 - `GET /crimes/` - List all cyber crimes
 - `GET /` - Home page with trending crimes
 
-### Chatbot API
-- `POST /api/chatbot/` - AI-powered chatbot responses
-- `GET /admin/chatbot/` - Chatbot admin dashboard
-- `GET /admin/customize-bot/` - Bot configuration management
-
 ## Contributing
 
 1. Fork the repository
