@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from .models import (
     AdminUser, CyberCrime, 
-    ChatbotConfig, AuditLog
+    ChatbotConfig, ChatbotConversation, AuditLog
 )
 from .forms import ChatbotConfigForm
 from .utils import log_audit_action, get_client_ip, sanitize_input
@@ -445,11 +445,42 @@ def admin_chatbot(request):
             system_prompt="You are CyberSafe AI Assistant, an expert cybersecurity advisor. Provide helpful, accurate information about cyber threats, prevention tips, and reporting procedures. Always prioritize user safety and direct them to official channels when needed."
         )
     
+    # Calculate real statistics
+    from datetime import datetime, timedelta
+    
+    # Get current month's conversations
+    current_month_start = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    monthly_conversations = ChatbotConversation.objects.filter(
+        created_at__gte=current_month_start
+    ).count()
+    
+    # Calculate average response time (last 100 conversations)
+    recent_conversations = ChatbotConversation.objects.filter(
+        success=True
+    ).order_by('-created_at')[:100]
+    
+    if recent_conversations:
+        avg_response_time = sum(conv.response_time for conv in recent_conversations) / len(recent_conversations)
+        avg_response_time = round(avg_response_time, 1)
+    else:
+        avg_response_time = 0.0
+    
+    # Calculate satisfaction rate (successful conversations in last 100)
+    total_recent = ChatbotConversation.objects.order_by('-created_at')[:100].count()
+    successful_recent = ChatbotConversation.objects.filter(
+        success=True
+    ).order_by('-created_at')[:100].count()
+    
+    if total_recent > 0:
+        satisfaction_rate = round((successful_recent / total_recent) * 100)
+    else:
+        satisfaction_rate = 100
+    
     context = {
         'config': config,
-        'total_conversations': 0,  # Placeholder
-        'avg_response_time': 2.5,  # Placeholder
-        'satisfaction_rate': 95,   # Placeholder
+        'total_conversations': monthly_conversations,
+        'avg_response_time': avg_response_time,
+        'satisfaction_rate': satisfaction_rate,
     }
     return render(request, 'admin/chatbot.html', context)
 
@@ -458,6 +489,9 @@ def admin_chatbot(request):
 @require_http_methods(["POST"])
 def chatbot_api(request):
     """Chatbot API endpoint - forwards user prompt to Gemini with system prompt from config"""
+    import time
+    start_time = time.time()
+    
     try:
         data = json.loads(request.body)
         user_message = data.get('message', '').strip()
@@ -493,6 +527,17 @@ def chatbot_api(request):
             print("Model created successfully")
         except Exception as e:
             print(f"Error creating model: {e}")
+            # Log failed conversation
+            response_time = time.time() - start_time
+            ChatbotConversation.objects.create(
+                user_message=user_message,
+                bot_response=f'Error creating AI model: {str(e)}',
+                response_time=response_time,
+                success=False,
+                error_message=str(e),
+                ip_address=get_client_ip(request),
+                user_agent=request.META.get('HTTP_USER_AGENT', '')
+            )
             return JsonResponse({
                 'response': f'Error creating AI model: {str(e)}. Please try again.'
             }, status=500)
@@ -506,17 +551,53 @@ def chatbot_api(request):
             response = model.generate_content(full_message)
             print("Response received from Gemini")
             
+            # Calculate response time
+            response_time = time.time() - start_time
+            
             # Extract text from response
             if response and response.text:
                 text = response.text.strip()
                 print(f"Extracted text: {text[:100]}...")
+                
+                # Log successful conversation
+                ChatbotConversation.objects.create(
+                    user_message=user_message,
+                    bot_response=text,
+                    response_time=response_time,
+                    success=True,
+                    ip_address=get_client_ip(request),
+                    user_agent=request.META.get('HTTP_USER_AGENT', '')
+                )
+                
                 return JsonResponse({'response': text, 'links': []})
             else:
                 print("No text in response")
+                # Log failed conversation
+                ChatbotConversation.objects.create(
+                    user_message=user_message,
+                    bot_response='Sorry, I received an empty response. Please try again.',
+                    response_time=response_time,
+                    success=False,
+                    error_message='Empty response from AI model',
+                    ip_address=get_client_ip(request),
+                    user_agent=request.META.get('HTTP_USER_AGENT', '')
+                )
                 return JsonResponse({'response': 'Sorry, I received an empty response. Please try again.'})
                 
         except Exception as e:
             print(f"Error generating content: {e}")
+            response_time = time.time() - start_time
+            
+            # Log failed conversation
+            ChatbotConversation.objects.create(
+                user_message=user_message,
+                bot_response=f'Sorry, I encountered an error: {str(e)}',
+                response_time=response_time,
+                success=False,
+                error_message=str(e),
+                ip_address=get_client_ip(request),
+                user_agent=request.META.get('HTTP_USER_AGENT', '')
+            )
             
             # Handle specific quota errors
             if "429" in str(e) or "quota" in str(e).lower():
@@ -536,6 +617,19 @@ def chatbot_api(request):
         import traceback
         print(f"Chatbot API Error: {str(e)}")
         print(f"Traceback: {traceback.format_exc()}")
+        
+        # Log failed conversation
+        response_time = time.time() - start_time
+        ChatbotConversation.objects.create(
+            user_message=user_message if 'user_message' in locals() else 'Unknown',
+            bot_response=f'Sorry, I encountered an error: {str(e)}',
+            response_time=response_time,
+            success=False,
+            error_message=str(e),
+            ip_address=get_client_ip(request),
+            user_agent=request.META.get('HTTP_USER_AGENT', '')
+        )
+        
         return JsonResponse({
             'response': f'Sorry, I encountered an error: {str(e)}. Please try again or check the server logs.'
         }, status=500)

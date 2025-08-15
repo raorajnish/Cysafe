@@ -137,6 +137,26 @@ class ChatbotConfig(models.Model):
         return f"Chatbot Config - {self.gemini_model}"
 
 
+class ChatbotConversation(models.Model):
+    """Model for tracking chatbot conversations"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user_message = models.TextField()
+    bot_response = models.TextField()
+    response_time = models.FloatField(help_text="Response time in seconds")
+    success = models.BooleanField(default=True)
+    error_message = models.TextField(blank=True, null=True)
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    user_agent = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'chatbot_conversations'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Conversation {self.id} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+
+
 class AuditLog(models.Model):
     """Model for storing admin action audit logs"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
