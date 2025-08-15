@@ -14,6 +14,7 @@ urlpatterns = [
     path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('admin/crimes/', views.admin_crimes, name='admin_crimes'),
     path('admin/chatbot/', views.admin_chatbot, name='admin_chatbot'),
+    path('admin/customize-bot/', views.customize_bot, name='customize_bot'),
     
     path('api/chatbot/', views.chatbot_api, name='chatbot_api'),
     path('api/increment-clicks/', views.increment_clicks, name='increment_clicks'),
