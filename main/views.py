@@ -406,43 +406,55 @@ def crime_data_api(request, crime_id):
 @login_required
 def admin_chatbot(request):
     """Admin chatbot management"""
+    print(f"=== ADMIN CHATBOT VIEW CALLED ===")
+    print(f"Request method: {request.method}")
+    print(f"POST data: {dict(request.POST) if request.method == 'POST' else 'No POST data'}")
+    
     config = ChatbotConfig.objects.first()
     
     if not config:
+        print("Creating new ChatbotConfig...")
         config = ChatbotConfig.objects.create(
             gemini_model='gemini-1.5-flash',
             system_prompt="You are CyberSafe AI Assistant, an expert cybersecurity advisor. Provide short, crisp responses about cyber threats, prevention tips, and reporting procedures. Only elaborate when specifically asked by the user. Always prioritize user safety and direct them to official channels when needed. Use bullet points for clarity and keep responses concise."
         )
+        print(f"Created config with ID: {config.id}")
     
     if request.method == 'POST':
+        print("=== FORM SUBMISSION DETECTED ===")
+        print(f"All POST keys: {list(request.POST.keys())}")
+        print(f"All POST values: {dict(request.POST)}")
+        print(f"'save_config' in request.POST: {'save_config' in request.POST}")
+        
         if 'save_config' in request.POST:
+            print("=== SAVE CONFIG ACTION DETECTED ===")
             # Save chatbot configuration
             gemini_api_key = request.POST.get('gemini_api_key')
             gemini_model = request.POST.get('gemini_model')
             system_prompt = request.POST.get('system_prompt')
             
-            print(f"=== FORM SUBMISSION DEBUG ===")
-            print(f"All POST data: {dict(request.POST)}")
+            print(f"=== FORM DATA RECEIVED ===")
             print(f"API Key: {gemini_api_key[:20] if gemini_api_key else 'None'}...")
             print(f"Model: {gemini_model}")
-            print(f"System Prompt (full): {repr(system_prompt)}")
+            print(f"System Prompt: {repr(system_prompt)}")
             print(f"System Prompt length: {len(system_prompt) if system_prompt else 0}")
             
             # Validate required fields
             if not gemini_model:
+                print("ERROR: No model selected")
                 messages.error(request, 'AI Model is required.')
                 return redirect('admin_chatbot')
             
+            print("=== SAVING CONFIG ===")
             config.gemini_api_key = gemini_api_key
             config.gemini_model = gemini_model
             config.system_prompt = system_prompt
             config.save()
             
-            print(f"=== AFTER SAVE DEBUG ===")
+            print(f"=== CONFIG SAVED ===")
             print(f"Saved config ID: {config.id}")
             print(f"Saved Model: {config.gemini_model}")
-            print(f"Saved System Prompt (full): {repr(config.system_prompt)}")
-            print(f"Saved System Prompt length: {len(config.system_prompt)}")
+            print(f"Saved System Prompt: {repr(config.system_prompt)}")
             
             log_audit_action(
                 request.user, 'UPDATE', 'chatbot_config', config.id,
@@ -453,10 +465,14 @@ def admin_chatbot(request):
             
             # Refresh the config object to get updated data
             config.refresh_from_db()
-            print(f"=== AFTER REFRESH DEBUG ===")
+            print(f"=== AFTER REFRESH ===")
             print(f"Refreshed System Prompt: {repr(config.system_prompt)}")
         
         return redirect('admin_chatbot')
+    
+    print(f"=== RENDERING TEMPLATE ===")
+    print(f"Config ID: {config.id if config else 'None'}")
+    print(f"Current System Prompt: {repr(config.system_prompt) if config else 'None'}")
     
     context = {
         'config': config,

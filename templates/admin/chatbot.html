@@ -146,7 +146,7 @@
                             
                             <!-- Save Button -->
                             <div class="d-grid">
-                                <button type="submit" name="save_config" class="btn btn-primary btn-lg">
+                                <button type="submit" name="save_config" value="save" class="btn btn-primary btn-lg">
                                     <i class="fas fa-save me-2"></i>Save Configuration
                                 </button>
                             </div>
@@ -366,6 +366,30 @@ function updateChatStatus(status) {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
+    // Form submission debugging
+    const configForm = document.querySelector('form[method="post"]');
+    if (configForm) {
+        console.log('Form found:', configForm);
+        configForm.addEventListener('submit', function(e) {
+            console.log('Form submitted!');
+            console.log('Form action:', this.action);
+            console.log('Form method:', this.method);
+            
+            // Log form data
+            const formData = new FormData(this);
+            console.log('Form data:');
+            for (let [key, value] of formData.entries()) {
+                if (key === 'gemini_api_key') {
+                    console.log(`${key}: ${value.substring(0, 20)}...`);
+                } else {
+                    console.log(`${key}: ${value}`);
+                }
+            }
+        });
+    } else {
+        console.error('Form not found!');
+    }
+    
     // Test chat event listeners
     const testInput = document.getElementById('test-chat-input');
     const testSendBtn = document.getElementById('test-chat-send');

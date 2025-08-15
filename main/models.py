@@ -143,6 +143,3 @@ class AuditLog(models.Model):
 
     def __str__(self):
         return f"{self.action} on {self.resource_type} by {self.admin_user.email}"
-
-
-# UserReport model removed - not in use
