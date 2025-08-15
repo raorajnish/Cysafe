@@ -123,6 +123,16 @@ CySafe-Django/
 - `GET /crimes/` - List all cyber crimes
 - `GET /` - Home page with trending crimes
 
+## Contributors
+
+**CyberSafe Team**
+
+| Name | Role |
+|------|------|
+| **Rajnish Rao** | Project Lead & Full Stack Developer |
+| **Omkar Wayal** | UI/UX Designer |
+| **Sahil Rane** | Frontend Developer |
+
 ## Contributing
 
 1. Fork the repository
