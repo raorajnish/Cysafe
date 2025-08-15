@@ -11,12 +11,7 @@ from django.utils import timezone
 from django.contrib import messages
 from django.conf import settings
 import json
-import uuid
-# import bcrypt
-# import jwt
 from datetime import datetime, timedelta
-import requests
-import re
 from dotenv import load_dotenv
 import google.generativeai as genai
 from .models import (
@@ -27,6 +22,24 @@ from .forms import ChatbotConfigForm
 from .utils import log_audit_action, get_client_ip, sanitize_input
 
 load_dotenv()
+
+
+def clean_chatbot_response(text):
+    """Clean up chatbot response text for better formatting"""
+    import re
+    
+    # Remove extra asterisks from markdown formatting
+    text = re.sub(r'\*\s+\*\*', '**', text)
+    text = re.sub(r'\*\*\s+\*', '**', text)
+    
+    # Clean up bullet points - ensure proper formatting
+    text = re.sub(r'^\*\s+\*\*', '• **', text, flags=re.MULTILINE)
+    
+    # Remove any double spaces and ensure proper line breaks
+    text = re.sub(r'  +', ' ', text)
+    text = text.replace('\n\n\n', '\n\n')
+    
+    return text
 
 
 def home(request):
@@ -442,11 +455,10 @@ def admin_chatbot(request):
     if not config:
         config = ChatbotConfig.objects.create(
             gemini_model='gemini-1.5-flash',
-            system_prompt="You are CyberSafe AI Assistant, an expert cybersecurity advisor. Provide helpful, accurate information about cyber threats, prevention tips, and reporting procedures. Always prioritize user safety and direct them to official channels when needed."
+            system_prompt="You are CyberSafe AI Assistant, a friendly yet professional cybersecurity advisor specializing in Indian cyber safety laws, threats, and prevention. Provide clear, human-like explanations that are informative but not overly long—just enough to cover the essential details. Always prioritize accuracy, practicality, and user safety.\n\nWhen giving advice:\n\nFocus on cyber threats, prevention tips, and safe online practices relevant to India.\n\nUse simple, relatable language without jargon unless necessary.\n\nWhere applicable, include relevant Indian laws (e.g., IT Act 2000) and real-world examples.\n\nWhen asked about reporting cybercrime:\n\nAlways guide users to official Indian government portals only, such as:\n\nNational Cyber Crime Reporting Portal: https://cybercrime.gov.in/\n\nIndian CERT: https://www.cert-in.org.in/\n\nDo not promote or mention non-governmental sites for reporting.\nIf the query is out of scope, politely decline and redirect to safe, official resources."
         )
     
     # Calculate real statistics
-    from datetime import datetime, timedelta
     
     # Get current month's conversations
     current_month_start = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
@@ -504,7 +516,7 @@ def chatbot_api(request):
         if not config:
             config = ChatbotConfig.objects.create(
                 gemini_model='gemini-1.5-pro',
-                system_prompt="You are CyberSafe AI Assistant, an expert cybersecurity advisor. Provide short, crisp responses about cyber threats, prevention tips, and reporting procedures. Only elaborate when specifically asked by the user. Always prioritize user safety and direct them to official channels when needed. Use bullet points for clarity and keep responses concise."
+                system_prompt="You are CyberSafe AI Assistant, a friendly yet professional cybersecurity advisor specializing in Indian cyber safety laws, threats, and prevention. Provide clear, human-like explanations that are informative but not overly long—just enough to cover the essential details. Always prioritize accuracy, practicality, and user safety.\n\nWhen giving advice:\n\nFocus on cyber threats, prevention tips, and safe online practices relevant to India.\n\nUse simple, relatable language without jargon unless necessary.\n\nWhere applicable, include relevant Indian laws (e.g., IT Act 2000) and real-world examples.\n\nWhen asked about reporting cybercrime:\n\nAlways guide users to official Indian government portals only, such as:\n\nNational Cyber Crime Reporting Portal: https://cybercrime.gov.in/\n\nIndian CERT: https://www.cert-in.org.in/\n\nDo not promote or mention non-governmental sites for reporting.\nIf the query is out of scope, politely decline and redirect to safe, official resources."
             )
 
         if not config.gemini_api_key:
@@ -514,17 +526,13 @@ def chatbot_api(request):
 
         # Configure Gemini with stored API key
         genai.configure(api_key=config.gemini_api_key)
-        print(f"Gemini configured with API key: {config.gemini_api_key[:20]}...")
-
+        
         # Use the saved model from config
         model_id = config.gemini_model or 'gemini-1.5-flash'
-        print(f"Using model: {model_id}")
-        print(f"System prompt: {config.system_prompt[:100]}...")
         
         try:
             # Create model without system instruction for better compatibility
             model = genai.GenerativeModel(model_id)
-            print("Model created successfully")
         except Exception as e:
             print(f"Error creating model: {e}")
             # Log failed conversation
@@ -543,13 +551,11 @@ def chatbot_api(request):
             }, status=500)
         
         try:
-            # Prepare the full message with system prompt
+            # Prepare the full message with system prompt from database
             full_message = f"{config.system_prompt}\n\nUser: {user_message}\n\nAssistant:"
-            print(f"Sending message to Gemini: {full_message[:100]}...")
             
             # Generate response
             response = model.generate_content(full_message)
-            print("Response received from Gemini")
             
             # Calculate response time
             response_time = time.time() - start_time
@@ -557,21 +563,22 @@ def chatbot_api(request):
             # Extract text from response
             if response and response.text:
                 text = response.text.strip()
-                print(f"Extracted text: {text[:100]}...")
+                
+                # Clean up the response text
+                cleaned_text = clean_chatbot_response(text)
                 
                 # Log successful conversation
                 ChatbotConversation.objects.create(
                     user_message=user_message,
-                    bot_response=text,
+                    bot_response=cleaned_text,
                     response_time=response_time,
                     success=True,
                     ip_address=get_client_ip(request),
                     user_agent=request.META.get('HTTP_USER_AGENT', '')
                 )
                 
-                return JsonResponse({'response': text, 'links': []})
+                return JsonResponse({'response': cleaned_text})
             else:
-                print("No text in response")
                 # Log failed conversation
                 ChatbotConversation.objects.create(
                     user_message=user_message,
@@ -660,7 +667,7 @@ def customize_bot(request):
     if not config:
         config = ChatbotConfig.objects.create(
             gemini_model='gemini-1.5-flash',
-            system_prompt="You are CyberSafe AI Assistant, an expert cybersecurity advisor. Provide helpful, accurate information about cyber threats, prevention tips, and reporting procedures. Always prioritize user safety and direct them to official channels when needed."
+            system_prompt="You are CyberSafe AI Assistant, a friendly yet professional cybersecurity advisor specializing in Indian cyber safety laws, threats, and prevention. Provide clear, human-like explanations that are informative but not overly long—just enough to cover the essential details. Always prioritize accuracy, practicality, and user safety.\n\nWhen giving advice:\n\nFocus on cyber threats, prevention tips, and safe online practices relevant to India.\n\nUse simple, relatable language without jargon unless necessary.\n\nWhere applicable, include relevant Indian laws (e.g., IT Act 2000) and real-world examples.\n\nWhen asked about reporting cybercrime:\n\nAlways guide users to official Indian government portals only, such as:\n\nNational Cyber Crime Reporting Portal: https://cybercrime.gov.in/\n\nIndian CERT: https://www.cert-in.org.in/\n\nDo not promote or mention non-governmental sites for reporting.\nIf the query is out of scope, politely decline and redirect to safe, official resources."
         )
     
     if request.method == 'POST':
