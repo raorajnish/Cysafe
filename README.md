@@ -145,6 +145,16 @@ CySafe-Django/
 - **Floating Chatbot Widget**: Always-accessible AI assistant
 - **Responsive Chat Interface**: Works seamlessly on all devices
 
+## Contributors
+
+**CyberSafe Team**
+
+| Name | Role |
+|------|------|
+| **Rajnish Rao** | Project Lead & Full Stack Developer |
+| **Sahil Rane** | Frontend Developer |
+| **Omkar Wayal** | UI/UX Designer |
+
 ## API Endpoints
 
 - `POST /api/increment-clicks/` - Increment view count for a crime
