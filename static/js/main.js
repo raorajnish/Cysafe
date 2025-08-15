@@ -1,24 +1,31 @@
 // Chatbot functionality
 class Chatbot {
     constructor() {
+        console.log('Chatbot constructor called');
         this.isOpen = false;
         this.messages = [];
         this.init();
     }
 
     init() {
+        console.log('Chatbot init called');
         this.createChatbotElements();
         this.bindEvents();
         this.addWelcomeMessage();
+        console.log('Chatbot init completed');
     }
 
     createChatbotElements() {
+        console.log('Creating chatbot elements');
+        
         // Create chatbot toggle button
         const toggleBtn = document.createElement('button');
         toggleBtn.className = 'chatbot-toggle';
         toggleBtn.innerHTML = '<i class="fas fa-comments"></i>';
         toggleBtn.id = 'chatbot-toggle';
+        toggleBtn.style.border = '2px solid red'; // Debug: make it visible
         document.body.appendChild(toggleBtn);
+        console.log('Chatbot toggle button created and appended');
 
         // Create chatbot widget
         const widget = document.createElement('div');
@@ -194,10 +201,17 @@ How can I assist you today?`,
 
     formatBotMessage(text) {
         // Convert markdown-like formatting to HTML
-        return text
+        let formatted = text
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/\n/g, '<br>');
+        
+        // Convert URLs to clickable links - simplified regex
+        formatted = formatted.replace(/(https?:\/\/[^\s]+)/g, function(match) {
+            return '<a href="' + match + '" target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: underline;">' + match + '</a>';
+        });
+        
+        return formatted;
     }
 
     showTypingIndicator() {
@@ -321,8 +335,14 @@ function filterCrimes() {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize chatbot
-    const chatbot = new Chatbot();
+    console.log('DOM loaded, initializing chatbot...');
+    try {
+        // Initialize chatbot
+        const chatbot = new Chatbot();
+        console.log('Chatbot initialized successfully');
+    } catch (error) {
+        console.error('Error initializing chatbot:', error);
+    }
 
     // Initialize search functionality
     const searchInput = document.getElementById('search-input');

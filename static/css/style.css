@@ -227,10 +227,11 @@ footer .bg-white.bg-opacity-10:hover {
     height: 60px;
     border-radius: 50%;
     background: var(--gradient-primary);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Fallback */
     color: white;
     border: none;
     box-shadow: var(--shadow-xl);
-    z-index: 1000;
+    z-index: 9999;
     transition: all 0.3s ease;
 }
 
@@ -306,6 +307,30 @@ footer .bg-white.bg-opacity-10:hover {
     color: var(--dark-color);
     border: 1px solid #e9ecef;
     border-radius: 15px 15px 15px 5px;
+}
+
+/* Chatbot link styles */
+.message.bot .message-content a {
+    color: #2563eb !important;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+}
+
+.message.bot .message-content a:hover {
+    color: #1d4ed8 !important;
+    text-decoration: underline;
+}
+
+/* Admin chatbot test interface link styles */
+#test-chat-messages a {
+    color: #2563eb !important;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+}
+
+#test-chat-messages a:hover {
+    color: #1d4ed8 !important;
+    text-decoration: underline;
 }
 
 /* Severity Badges */
