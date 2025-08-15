@@ -219,12 +219,16 @@ def admin_crimes(request):
         prevention_tip_2 = request.POST.get('prevention_tip_2', '').strip()
         prevention_tip_3 = request.POST.get('prevention_tip_3', '').strip()
         prevention_tip_4 = request.POST.get('prevention_tip_4', '').strip()
+        prevention_tip_5 = request.POST.get('prevention_tip_5', '').strip()
+        prevention_tip_6 = request.POST.get('prevention_tip_6', '').strip()
         
         # Get individual reporting steps
         reporting_step_1 = request.POST.get('reporting_step_1', '').strip()
         reporting_step_2 = request.POST.get('reporting_step_2', '').strip()
         reporting_step_3 = request.POST.get('reporting_step_3', '').strip()
         reporting_step_4 = request.POST.get('reporting_step_4', '').strip()
+        reporting_step_5 = request.POST.get('reporting_step_5', '').strip()
+        reporting_step_6 = request.POST.get('reporting_step_6', '').strip()
         
         # Debug: Print all POST data
         print(f"DEBUG - All POST data:")
@@ -241,10 +245,14 @@ def admin_crimes(request):
         print(f"Prevention Tip 2: {prevention_tip_2}")
         print(f"Prevention Tip 3: {prevention_tip_3}")
         print(f"Prevention Tip 4: {prevention_tip_4}")
+        print(f"Prevention Tip 5: {prevention_tip_5}")
+        print(f"Prevention Tip 6: {prevention_tip_6}")
         print(f"Reporting Step 1: {reporting_step_1}")
         print(f"Reporting Step 2: {reporting_step_2}")
         print(f"Reporting Step 3: {reporting_step_3}")
         print(f"Reporting Step 4: {reporting_step_4}")
+        print(f"Reporting Step 5: {reporting_step_5}")
+        print(f"Reporting Step 6: {reporting_step_6}")
         
         # Sanitize inputs
         crime_type = sanitize_input(crime_type)
@@ -253,17 +261,23 @@ def admin_crimes(request):
         prevention_tip_2 = sanitize_input(prevention_tip_2)
         prevention_tip_3 = sanitize_input(prevention_tip_3)
         prevention_tip_4 = sanitize_input(prevention_tip_4)
+        prevention_tip_5 = sanitize_input(prevention_tip_5)
+        prevention_tip_6 = sanitize_input(prevention_tip_6)
         reporting_step_1 = sanitize_input(reporting_step_1)
         reporting_step_2 = sanitize_input(reporting_step_2)
         reporting_step_3 = sanitize_input(reporting_step_3)
         reporting_step_4 = sanitize_input(reporting_step_4)
+        reporting_step_5 = sanitize_input(reporting_step_5)
+        reporting_step_6 = sanitize_input(reporting_step_6)
         
         # Combine prevention tips and reporting steps into lists
         prevention_tips = [
-            prevention_tip_1, prevention_tip_2, prevention_tip_3, prevention_tip_4
+            prevention_tip_1, prevention_tip_2, prevention_tip_3, prevention_tip_4,
+            prevention_tip_5, prevention_tip_6
         ]
         reporting_steps = [
-            reporting_step_1, reporting_step_2, reporting_step_3, reporting_step_4
+            reporting_step_1, reporting_step_2, reporting_step_3, reporting_step_4,
+            reporting_step_5, reporting_step_6
         ]
         
         # Filter out empty tips/steps but keep non-empty ones
@@ -300,10 +314,14 @@ def admin_crimes(request):
                 crime.prevention_tip_2 = prevention_tip_2
                 crime.prevention_tip_3 = prevention_tip_3
                 crime.prevention_tip_4 = prevention_tip_4
+                crime.prevention_tip_5 = prevention_tip_5
+                crime.prevention_tip_6 = prevention_tip_6
                 crime.reporting_step_1 = reporting_step_1
                 crime.reporting_step_2 = reporting_step_2
                 crime.reporting_step_3 = reporting_step_3
                 crime.reporting_step_4 = reporting_step_4
+                crime.reporting_step_5 = reporting_step_5
+                crime.reporting_step_6 = reporting_step_6
                 crime.save()
                 
                 print(f"DEBUG - Crime updated with ID: {crime.id}")
@@ -324,10 +342,14 @@ def admin_crimes(request):
                 prevention_tip_2=prevention_tip_2,
                 prevention_tip_3=prevention_tip_3,
                 prevention_tip_4=prevention_tip_4,
+                prevention_tip_5=prevention_tip_5,
+                prevention_tip_6=prevention_tip_6,
                 reporting_step_1=reporting_step_1,
                 reporting_step_2=reporting_step_2,
                 reporting_step_3=reporting_step_3,
-                reporting_step_4=reporting_step_4
+                reporting_step_4=reporting_step_4,
+                reporting_step_5=reporting_step_5,
+                reporting_step_6=reporting_step_6
             )
             
             print(f"DEBUG - Crime created with ID: {crime.id}")
@@ -373,6 +395,10 @@ def crime_data_api(request, crime_id):
             prevention_tips.append(crime.prevention_tip_3)
         if crime.prevention_tip_4:
             prevention_tips.append(crime.prevention_tip_4)
+        if crime.prevention_tip_5:
+            prevention_tips.append(crime.prevention_tip_5)
+        if crime.prevention_tip_6:
+            prevention_tips.append(crime.prevention_tip_6)
             
         reporting_steps = []
         if crime.reporting_step_1:
@@ -383,6 +409,10 @@ def crime_data_api(request, crime_id):
             reporting_steps.append(crime.reporting_step_3)
         if crime.reporting_step_4:
             reporting_steps.append(crime.reporting_step_4)
+        if crime.reporting_step_5:
+            reporting_steps.append(crime.reporting_step_5)
+        if crime.reporting_step_6:
+            reporting_steps.append(crime.reporting_step_6)
         
         data = {
             'id': str(crime.id),

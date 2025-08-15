@@ -300,6 +300,16 @@
                                 <input type="text" class="form-control" name="prevention_tip_4" 
                                        placeholder="Enter prevention tip 4">
                             </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Prevention Tip 5</label>
+                                <input type="text" class="form-control" name="prevention_tip_5" 
+                                       placeholder="Enter prevention tip 5">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Prevention Tip 6</label>
+                                <input type="text" class="form-control" name="prevention_tip_6" 
+                                       placeholder="Enter prevention tip 6">
+                            </div>
                         </div>
                     </div>
                     
@@ -328,6 +338,16 @@
                                 <label class="form-label">Reporting Step 4</label>
                                 <input type="text" class="form-control" name="reporting_step_4" 
                                        placeholder="Enter reporting step 4">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Reporting Step 5</label>
+                                <input type="text" class="form-control" name="reporting_step_5" 
+                                       placeholder="Enter reporting step 5">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Reporting Step 6</label>
+                                <input type="text" class="form-control" name="reporting_step_6" 
+                                       placeholder="Enter reporting step 6">
                             </div>
                         </div>
                     </div>
@@ -610,12 +630,16 @@ function editCrime(crimeId) {
                 document.querySelector('input[name="prevention_tip_2"]').value = data.prevention_tips[1] || '';
                 document.querySelector('input[name="prevention_tip_3"]').value = data.prevention_tips[2] || '';
                 document.querySelector('input[name="prevention_tip_4"]').value = data.prevention_tips[3] || '';
+                document.querySelector('input[name="prevention_tip_5"]').value = data.prevention_tips[4] || '';
+                document.querySelector('input[name="prevention_tip_6"]').value = data.prevention_tips[5] || '';
                 
                 // Populate reporting steps
                 document.querySelector('input[name="reporting_step_1"]').value = data.reporting_steps[0] || '';
                 document.querySelector('input[name="reporting_step_2"]').value = data.reporting_steps[1] || '';
                 document.querySelector('input[name="reporting_step_3"]').value = data.reporting_steps[2] || '';
                 document.querySelector('input[name="reporting_step_4"]').value = data.reporting_steps[3] || '';
+                document.querySelector('input[name="reporting_step_5"]').value = data.reporting_steps[4] || '';
+                document.querySelector('input[name="reporting_step_6"]').value = data.reporting_steps[5] || '';
                 
                 // Show the modal
                 const modal = new bootstrap.Modal(modalElement);

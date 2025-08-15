@@ -53,12 +53,16 @@ class CyberCrime(models.Model):
     prevention_tip_2 = models.CharField(max_length=500, blank=True, null=True)
     prevention_tip_3 = models.CharField(max_length=500, blank=True, null=True)
     prevention_tip_4 = models.CharField(max_length=500, blank=True, null=True)
+    prevention_tip_5 = models.CharField(max_length=500, blank=True, null=True)
+    prevention_tip_6 = models.CharField(max_length=500, blank=True, null=True)
     
     # Reporting Steps - Individual fields
     reporting_step_1 = models.CharField(max_length=500, blank=True, null=True)
     reporting_step_2 = models.CharField(max_length=500, blank=True, null=True)
     reporting_step_3 = models.CharField(max_length=500, blank=True, null=True)
     reporting_step_4 = models.CharField(max_length=500, blank=True, null=True)
+    reporting_step_5 = models.CharField(max_length=500, blank=True, null=True)
+    reporting_step_6 = models.CharField(max_length=500, blank=True, null=True)
     
     learn_more_clicks = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -78,6 +82,8 @@ class CyberCrime(models.Model):
         if self.prevention_tip_2: count += 1
         if self.prevention_tip_3: count += 1
         if self.prevention_tip_4: count += 1
+        if self.prevention_tip_5: count += 1
+        if self.prevention_tip_6: count += 1
         return count
     
     def get_reporting_steps_count(self):
@@ -87,6 +93,8 @@ class CyberCrime(models.Model):
         if self.reporting_step_2: count += 1
         if self.reporting_step_3: count += 1
         if self.reporting_step_4: count += 1
+        if self.reporting_step_5: count += 1
+        if self.reporting_step_6: count += 1
         return count
     
     def get_prevention_tips_list(self):
@@ -96,6 +104,8 @@ class CyberCrime(models.Model):
         if self.prevention_tip_2: tips.append(self.prevention_tip_2)
         if self.prevention_tip_3: tips.append(self.prevention_tip_3)
         if self.prevention_tip_4: tips.append(self.prevention_tip_4)
+        if self.prevention_tip_5: tips.append(self.prevention_tip_5)
+        if self.prevention_tip_6: tips.append(self.prevention_tip_6)
         return tips
     
     def get_reporting_steps_list(self):
@@ -105,6 +115,8 @@ class CyberCrime(models.Model):
         if self.reporting_step_2: steps.append(self.reporting_step_2)
         if self.reporting_step_3: steps.append(self.reporting_step_3)
         if self.reporting_step_4: steps.append(self.reporting_step_4)
+        if self.reporting_step_5: steps.append(self.reporting_step_5)
+        if self.reporting_step_6: steps.append(self.reporting_step_6)
         return steps
 
 
