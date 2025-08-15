@@ -1,31 +1,24 @@
 // Chatbot functionality
 class Chatbot {
     constructor() {
-        console.log('Chatbot constructor called');
         this.isOpen = false;
         this.messages = [];
         this.init();
     }
 
     init() {
-        console.log('Chatbot init called');
         this.createChatbotElements();
         this.bindEvents();
         this.addWelcomeMessage();
-        console.log('Chatbot init completed');
     }
 
     createChatbotElements() {
-        console.log('Creating chatbot elements');
-        
         // Create chatbot toggle button
         const toggleBtn = document.createElement('button');
         toggleBtn.className = 'chatbot-toggle';
         toggleBtn.innerHTML = '<i class="fas fa-comments"></i>';
         toggleBtn.id = 'chatbot-toggle';
-        toggleBtn.style.border = '2px solid red'; // Debug: make it visible
         document.body.appendChild(toggleBtn);
-        console.log('Chatbot toggle button created and appended');
 
         // Create chatbot widget
         const widget = document.createElement('div');
@@ -335,14 +328,8 @@ function filterCrimes() {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing chatbot...');
-    try {
-        // Initialize chatbot
-        const chatbot = new Chatbot();
-        console.log('Chatbot initialized successfully');
-    } catch (error) {
-        console.error('Error initializing chatbot:', error);
-    }
+    // Initialize chatbot
+    const chatbot = new Chatbot();
 
     // Initialize search functionality
     const searchInput = document.getElementById('search-input');

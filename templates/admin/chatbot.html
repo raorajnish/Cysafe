@@ -183,17 +183,10 @@
 <script>
 // Test Chatbot Functions
 function sendTestMessage() {
-    console.log('sendTestMessage called');
     const input = document.getElementById('test-chat-input');
     const message = input.value.trim();
     
-    console.log('Input element:', input);
-    console.log('Message:', message);
-    
-    if (!message) {
-        console.log('No message, returning');
-        return;
-    }
+    if (!message) return;
     
     // Add user message to chat
     addTestMessage('user', message);
@@ -314,54 +307,28 @@ function updateChatStatus(status) {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Admin chatbot DOM loaded');
-    
     // Form submission debugging
     const configForm = document.querySelector('form[method="post"]');
     if (configForm) {
-        console.log('Form found:', configForm);
         configForm.addEventListener('submit', function(e) {
-            console.log('Form submitted!');
-            console.log('Form action:', this.action);
-            console.log('Form method:', this.method);
-            
-            // Log form data
-            const formData = new FormData(this);
-            console.log('Form data:');
-            for (let [key, value] of formData.entries()) {
-                if (key === 'gemini_api_key') {
-                    console.log(`${key}: ${value.substring(0, 20)}...`);
-                } else {
-                    console.log(`${key}: ${value}`);
-                }
-            }
+            // Form submission handling
         });
-    } else {
-        console.error('Form not found!');
     }
     
     // Test chat event listeners
     const testInput = document.getElementById('test-chat-input');
     const testSendBtn = document.getElementById('test-chat-send');
     
-    console.log('Test input element:', testInput);
-    console.log('Test send button:', testSendBtn);
-    
     if (testInput) {
         testInput.addEventListener('keypress', function(e) {
-            console.log('Key pressed:', e.key);
             if (e.key === 'Enter') {
-                console.log('Enter key pressed, calling sendTestMessage');
                 sendTestMessage();
             }
         });
     }
     
     if (testSendBtn) {
-        testSendBtn.addEventListener('click', function() {
-            console.log('Send button clicked, calling sendTestMessage');
-            sendTestMessage();
-        });
+        testSendBtn.addEventListener('click', sendTestMessage);
     }
     
     // Auto-dismiss alerts
