@@ -130,8 +130,8 @@ CySafe-Django/
 | Name | Role |
 |------|------|
 | **Rajnish Rao** | Project Lead & Full Stack Developer |
-| **Omkar Wayal** | UI/UX Designer |
 | **Sahil Rane** | Frontend Developer |
+| **Omkar Wayal** | UI/UX Designer |
 
 ## Contributing
 
