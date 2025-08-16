@@ -453,16 +453,236 @@
                     If you're currently experiencing a cyber attack or have urgent concerns, 
                     don't hesitate to contact emergency services immediately.
                 </p>
-                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-                    <a href="tel:1930" class="btn btn-light btn-lg px-4 py-3 fw-bold">
+                
+                <!-- Primary Emergency Actions -->
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mb-4">
+                    <a href="tel:1930" class="btn btn-light btn-lg px-4 py-3 fw-bold emergency-btn" onclick="trackEmergencyCall('1930')">
                         <i class="fas fa-phone me-2"></i>Call Cyber Crime Helpline
                     </a>
-                    <a href="https://cybercrime.gov.in" target="_blank" class="btn btn-outline-light btn-lg px-4 py-3 fw-bold">
+                    <a href="https://cybercrime.gov.in" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-lg px-4 py-3 fw-bold emergency-btn" onclick="trackEmergencyPortal()">
                         <i class="fas fa-external-link-alt me-2"></i>Visit Official Portal
                     </a>
+                </div>
+                
+                <!-- Additional Emergency Options -->
+                <div class="row g-3 mt-4">
+                    <div class="col-md-4">
+                        <div class="bg-white bg-opacity-10 rounded p-3 emergency-option">
+                            <i class="fas fa-phone fa-2x text-white mb-2"></i>
+                            <h6 class="text-white fw-bold">Call 1930</h6>
+                            <p class="text-white opacity-90 small mb-2">National Cyber Crime Helpline</p>
+                            <a href="tel:1930" class="btn btn-light btn-sm w-100 emergency-btn" onclick="trackEmergencyCall('1930')">
+                                <i class="fas fa-phone me-1"></i>Call Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-white bg-opacity-10 rounded p-3 emergency-option">
+                            <i class="fas fa-globe fa-2x text-white mb-2"></i>
+                            <h6 class="text-white fw-bold">Online Portal</h6>
+                            <p class="text-white opacity-90 small mb-2">File Complaint Online</p>
+                            <a href="https://cybercrime.gov.in" target="_blank" rel="noopener noreferrer" class="btn btn-light btn-sm w-100 emergency-btn" onclick="trackEmergencyPortal()">
+                                <i class="fas fa-external-link-alt me-1"></i>Visit Portal
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-white bg-opacity-10 rounded p-3 emergency-option">
+                            <i class="fas fa-robot fa-2x text-white mb-2"></i>
+                            <h6 class="text-white fw-bold">AI Assistant</h6>
+                            <p class="text-white opacity-90 small mb-2">Get Instant Guidance</p>
+                            <button class="btn btn-light btn-sm w-100" onclick="openEmergencyChat()">
+                                <i class="fas fa-comments me-1"></i>Chat Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Emergency Instructions -->
+                <div class="mt-5">
+                    <div class="bg-white bg-opacity-10 rounded p-4">
+                        <h5 class="text-white fw-bold mb-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            What to do in case of a cyber attack:
+                        </h5>
+                        <div class="row text-start">
+                            <div class="col-md-6">
+                                <ul class="text-white opacity-90">
+                                    <li>Immediately disconnect from the internet</li>
+                                    <li>Change all passwords from a secure device</li>
+                                    <li>Contact your bank if financial data is compromised</li>
+                                    <li>Document everything for police report</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="text-white opacity-90">
+                                    <li>Don't pay ransom demands</li>
+                                    <li>Preserve evidence (screenshots, emails)</li>
+                                    <li>Report to cybercrime.gov.in</li>
+                                    <li>Contact local cyber police station</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Emergency JavaScript -->
+<script>
+function trackEmergencyCall(number) {
+    // Track emergency call attempts
+    console.log('Emergency call attempted to:', number);
+    
+    // Check if running on mobile device
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        // Mobile device - tel: protocol should work
+        return true;
+    } else {
+        // Desktop device - show alternative options
+        showDesktopEmergencyOptions(number);
+        return false;
+    }
+}
+
+function showDesktopEmergencyOptions(number) {
+    // Create a modal or alert with alternative options for desktop users
+    const message = `Phone calls are not supported on desktop devices. 
+    
+For immediate assistance, please:
+• Visit: https://cybercrime.gov.in
+• Use our AI Assistant (click the chat button)
+• Contact your local cyber police station
+• Call from a mobile device: ${number}`;
+
+    // Show a styled alert with options
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert-warning alert-dismissible fade show position-fixed';
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);';
+    alertDiv.innerHTML = `
+        <div class="d-flex align-items-start">
+            <i class="fas fa-exclamation-triangle text-warning me-2 mt-1"></i>
+            <div class="flex-grow-1">
+                <h6 class="alert-heading fw-bold">Desktop Device Detected</h6>
+                <p class="mb-2">Phone calls are not supported on desktop.</p>
+                <div class="d-grid gap-2">
+                    <a href="https://cybercrime.gov.in" target="_blank" class="btn btn-primary btn-sm">
+                        <i class="fas fa-external-link-alt me-1"></i>Visit Official Portal
+                    </a>
+                    <button class="btn btn-info btn-sm" onclick="openEmergencyChat()">
+                        <i class="fas fa-robot me-1"></i>Use AI Assistant
+                    </button>
+                </div>
+            </div>
+            <button type="button" class="btn-close" onclick="this.parentElement.parentElement.remove()"></button>
+        </div>
+    `;
+    
+    document.body.appendChild(alertDiv);
+    
+    // Auto-remove after 10 seconds
+    setTimeout(() => {
+        if (alertDiv.parentElement) {
+            alertDiv.remove();
+        }
+    }, 10000);
+}
+
+function trackEmergencyPortal() {
+    // Track portal visits
+    console.log('Emergency portal accessed');
+    
+    // Add a small delay to ensure the link opens properly
+    setTimeout(() => {
+        window.open('https://cybercrime.gov.in', '_blank', 'noopener,noreferrer');
+    }, 100);
+    
+    return true;
+}
+
+function openEmergencyChat() {
+    // Open the chatbot for emergency assistance
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    if (chatbotToggle) {
+        chatbotToggle.click();
+        
+        // Auto-fill emergency message
+        setTimeout(() => {
+            const input = document.getElementById('chatbot-input');
+            if (input) {
+                input.value = 'I need immediate help with a cyber attack. What should I do?';
+                input.focus();
+            }
+        }, 500);
+    } else {
+        // Fallback if chatbot is not available
+        alert('AI Assistant is not available. Please visit https://cybercrime.gov.in for immediate assistance.');
+    }
+}
+
+// Add click event listeners to emergency buttons
+document.addEventListener('DOMContentLoaded', function() {
+    const emergencyBtns = document.querySelectorAll('.emergency-btn');
+    emergencyBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            // Add visual feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    });
+    
+    // Add fallback for phone links on desktop
+    const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+    phoneLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                e.preventDefault();
+                const number = this.href.replace('tel:', '');
+                showDesktopEmergencyOptions(number);
+            }
+        });
+    });
+});
+
+// Add emergency contact information to page
+function addEmergencyInfo() {
+    const emergencyInfo = `
+        <div class="alert alert-danger mt-3" role="alert">
+            <h6 class="alert-heading fw-bold">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Emergency Contact Information
+            </h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Cyber Crime Helpline:</strong> 1930<br>
+                    <strong>National Emergency:</strong> 112<br>
+                    <strong>Women Helpline:</strong> 181
+                </div>
+                <div class="col-md-6">
+                    <strong>Child Helpline:</strong> 1098<br>
+                    <strong>Online Portal:</strong> cybercrime.gov.in<br>
+                    <strong>Local Police:</strong> 100
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add to the top of the emergency section
+    const emergencySection = document.querySelector('.emergency-section .container');
+    if (emergencySection) {
+        const infoDiv = document.createElement('div');
+        infoDiv.innerHTML = emergencyInfo;
+        emergencySection.insertBefore(infoDiv.firstElementChild, emergencySection.firstChild);
+    }
+}
+
+// Initialize emergency features
+document.addEventListener('DOMContentLoaded', function() {
+    addEmergencyInfo();
+});
+</script>
 {% endblock %} 

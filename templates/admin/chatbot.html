@@ -8,18 +8,18 @@
         <!-- Enhanced Header -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                        <div class="bg-gradient-primary rounded-circle p-3 me-3">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                    <div class="d-flex align-items-center mb-3 mb-md-0">
+                        <div class="bg-gradient-primary rounded-circle p-2 p-md-3 me-3">
                             <i class="fas fa-robot fa-2x text-white"></i>
                         </div>
                         <div>
                             <h1 class="h3 fw-bold text-dark mb-1">AI Chatbot Management</h1>
-                            <p class="text-muted mb-0">Configure your intelligent cybersecurity assistant</p>
+                            <p class="text-muted mb-0 small">Configure your intelligent cybersecurity assistant</p>
                         </div>
                     </div>
                     <div class="d-flex gap-2">
-                        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary">
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary btn-sm">
                             <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
                         </a>
                     </div>
@@ -28,58 +28,58 @@
         </div>
 
         <!-- Statistics Cards -->
-        <div class="row g-4 mb-4">
-            <div class="col-xl-3 col-md-6">
+        <div class="row g-3 g-md-4 mb-4">
+            <div class="col-6 col-xl-3">
                 <div class="card border-0 shadow-sm stats-card h-100">
-                    <div class="card-body text-center p-4">
-                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                    <div class="card-body text-center p-3 p-md-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
                             <i class="fas fa-brain fa-2x text-primary"></i>
                         </div>
-                        <h3 class="fw-bold text-primary mb-1">{{ config.gemini_model|default:"Not Set" }}</h3>
-                        <p class="text-muted mb-0">AI Model</p>
-                        <small class="text-success">
+                        <h3 class="fw-bold text-primary mb-2">{{ config.gemini_model|default:"Not Set" }}</h3>
+                        <p class="text-muted mb-2">AI Model</p>
+                        <small class="text-success d-inline-block">
                             <i class="fas fa-check me-1"></i>Active
                         </small>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-xl-3">
                 <div class="card border-0 shadow-sm stats-card h-100">
-                    <div class="card-body text-center p-4">
-                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                    <div class="card-body text-center p-3 p-md-4">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
                             <i class="fas fa-comments fa-2x text-success"></i>
                         </div>
-                        <h3 class="fw-bold text-success mb-1">{{ total_conversations|default:"0" }}</h3>
-                        <p class="text-muted mb-0">Total Conversations</p>
-                        <small class="text-info">
+                        <h3 class="fw-bold text-success mb-2">{{ total_conversations|default:"0" }}</h3>
+                        <p class="text-muted mb-2">Total Conversations</p>
+                        <small class="text-info d-inline-block">
                             <i class="fas fa-clock me-1"></i>This Month
                         </small>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-xl-3">
                 <div class="card border-0 shadow-sm stats-card h-100">
-                    <div class="card-body text-center p-4">
-                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                    <div class="card-body text-center p-3 p-md-4">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
                             <i class="fas fa-stopwatch fa-2x text-warning"></i>
                         </div>
-                        <h3 class="fw-bold text-warning mb-1">{{ avg_response_time|default:"2.5" }}s</h3>
-                        <p class="text-muted mb-0">Avg Response Time</p>
-                        <small class="text-success">
+                        <h3 class="fw-bold text-warning mb-2">{{ avg_response_time|default:"2.5" }}s</h3>
+                        <p class="text-muted mb-2">Avg Response Time</p>
+                        <small class="text-success d-inline-block">
                             <i class="fas fa-check me-1"></i>Fast
                         </small>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-xl-3">
                 <div class="card border-0 shadow-sm stats-card h-100">
-                    <div class="card-body text-center p-4">
-                        <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                    <div class="card-body text-center p-3 p-md-4">
+                        <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
                             <i class="fas fa-heart fa-2x text-info"></i>
                         </div>
-                        <h3 class="fw-bold text-info mb-1">{{ satisfaction_rate|default:"95" }}%</h3>
-                        <p class="text-muted mb-0">Satisfaction Rate</p>
-                        <small class="text-success">
+                        <h3 class="fw-bold text-info mb-2">{{ satisfaction_rate|default:"95" }}%</h3>
+                        <p class="text-muted mb-2">Satisfaction Rate</p>
+                        <small class="text-success d-inline-block">
                             <i class="fas fa-star me-1"></i>Excellent
                         </small>
                     </div>
@@ -92,8 +92,8 @@
             <div class="col-12">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-header bg-gradient-success text-white border-0">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                            <div class="d-flex align-items-center mb-2 mb-md-0">
                                 <i class="fas fa-comments fa-lg me-3"></i>
                                 <h5 class="fw-bold mb-0">Test Chatbot</h5>
                             </div>
@@ -122,10 +122,10 @@
                         
                         <!-- Test Chat Interface -->
                         <div class="chat-test-container">
-                            <div class="chat-messages" id="test-chat-messages" style="height: 300px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 0.375rem; padding: 1rem; margin-bottom: 1rem; background-color: #f8f9fa;">
+                            <div class="chat-messages" id="test-chat-messages" style="height: 250px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 0.375rem; padding: 0.75rem; margin-bottom: 1rem; background-color: #f8f9fa;">
                                 <div class="text-center text-muted">
                                     <i class="fas fa-robot fa-2x mb-2"></i>
-                                    <p>Start a conversation to test your chatbot</p>
+                                    <p class="mb-0">Start a conversation to test your chatbot</p>
                                 </div>
                             </div>
                             
@@ -144,9 +144,9 @@
                         </div>
                         
                         <!-- Test Status -->
-                        <div class="mt-3 p-3 bg-light rounded">
-                            <div class="row g-2">
-                                <div class="col-6">
+                        <div class="mt-3 p-2 p-md-3 bg-light rounded">
+                            <div class="row g-2 g-md-3">
+                                <div class="col-6 col-md-6">
                                     <div class="d-flex align-items-center">
                                         <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
                                             <i class="fas fa-robot text-primary"></i>
@@ -157,7 +157,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6 col-md-6">
                                     <div class="d-flex align-items-center">
                                         <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
                                             <i class="fas fa-comments text-success"></i>
